@@ -17,8 +17,9 @@ export default function HomePage() {
       <section className="hero">
         <div className="container heroGrid">
           <Reveal className="heroCopy">
-            <span className="eyebrow">SahhaDaily Lebanon</span>
+            <span className="eyebrow">SahhaDaily Lebanon · صحة ديلي</span>
             <h1>Premium wellness supplements in Lebanon</h1>
+            <p className="arabicTag">صحتك بالديني <em>— Daily support, better you.</em></p>
             <p className="lead">
               Explore products for daily wellness, beauty, immunity, energy, and active lifestyles.
             </p>
@@ -33,10 +34,10 @@ export default function HomePage() {
 
       <section className="container">
         <div className="statStrip">
-          <div className="statItem"><strong>{products.length} active products</strong><span>Initial Lebanon batch</span></div>
-          <div className="statItem"><strong>{categories.length} categories</strong><span>Grouped by stock sheet</span></div>
-          <div className="statItem"><strong>Consistent product cards</strong><span>Mobile, tablet, and desktop ready</span></div>
-          <div className="statItem"><strong>Full details pages</strong><span>Benefits, ingredients, and usage</span></div>
+          <div className="statItem"><strong>Delivered in Lebanon</strong><span>Straight to your door</span></div>
+          <div className="statItem"><strong>WeightWorld sourced</strong><span>Quality-verified formulas</span></div>
+          <div className="statItem"><strong>15 products</strong><span>Covering 5 wellness categories</span></div>
+          <div className="statItem"><strong>Full details on every page</strong><span>Ingredients, usage, and nutrition</span></div>
         </div>
       </section>
 

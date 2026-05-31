@@ -123,19 +123,41 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <div className="container productHeroGrid">
           <ProductGallery images={galleryImages} name={product.name} />
           <div className="detailPanel">
-            <Link href="/shop" className="smallLink">Back to shop</Link>
+            <Link href="/shop" className="smallLink">← Back to shop</Link>
             <div className="metaList">
               <span className="badge">{product.category}</span>
               <span className="badge">{product.format}</span>
               <span className="badge">{product.sku}</span>
+              {product.label === "bestSeller" && <span className="badge" style={{ background: "var(--green)", color: "#fff" }}>Best Seller</span>}
+              {product.label === "lowStock" && <span className="badge" style={{ background: "rgba(180,50,30,0.9)", color: "#fff" }}>Low Stock</span>}
+              {product.label === "new" && <span className="badge" style={{ background: "var(--orange)", color: "#fff" }}>New</span>}
             </div>
             <h1>{product.name}</h1>
+            <div className="ratingRow" style={{ marginBottom: 16 }}>
+              <span className="stars" aria-label={`${product.rating} out of 5`}>
+                {"★".repeat(Math.floor(product.rating))}
+                {product.rating % 1 >= 0.5 ? "½" : ""}
+                {"☆".repeat(5 - Math.floor(product.rating) - (product.rating % 1 >= 0.5 ? 1 : 0))}
+              </span>
+              <span className="ratingCount">({product.reviewCount} reviews)</span>
+            </div>
             <p className="lead">{product.description}</p>
             <div className="featureList" aria-label="Key product features">
               {product.keyFeatures.map((feature) => (
                 <span key={feature}>{feature}</span>
               ))}
             </div>
+            <a
+              href={`https://wa.me/96170000000?text=${encodeURIComponent(
+                `Hi SahhaDaily! 🌿\nI'd like to order:\n• ${product.name}\n• SKU: ${product.sku}\n\nMy details:\nName: \nCity: \nAddress: `
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btnPrimary"
+              style={{ marginTop: 28, display: "inline-flex" }}
+            >
+              Order on WhatsApp
+            </a>
           </div>
         </div>
       </section>
@@ -167,12 +189,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 )}
               </ProductAccordion>
             ))}
-
-            <ProductAccordion title="Key features">
-              <ul>
-                {product.keyFeatures.map((item) => <li key={item}>{item}</li>)}
-              </ul>
-            </ProductAccordion>
 
             <ProductAccordion title="How to use">
               <p>{product.howToUse}</p>
