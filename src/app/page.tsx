@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { HeroMotion } from "@/components/HeroMotion";
+import { ProductFinder } from "@/components/ProductFinder";
 import { ProductCard } from "@/components/ProductCard";
 import { Reveal } from "@/components/Reveal";
+import { RoutineBundles } from "@/components/RoutineBundles";
 import { categories, products } from "@/data/products";
 
 const categorySections = categories
@@ -40,6 +42,10 @@ export default function HomePage() {
           <div className="statItem"><strong>Full details on every page</strong><span>Ingredients, usage, and nutrition</span></div>
         </div>
       </section>
+
+      <ProductFinder />
+
+      <RoutineBundles />
 
       <section className="section" id="categories">
         <div className="container">

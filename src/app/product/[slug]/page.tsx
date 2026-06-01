@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { ProductCard } from "@/components/ProductCard";
 import { ProductGallery } from "@/components/ProductGallery";
 import { getProductBySlug, getRelatedProducts, products } from "@/data/products";
+import { getGoalsForSku } from "@/data/merchandising";
 import scrapedProducts from "@/data/weightworld-scraped-launch-products.json";
 
 type ProductPageProps = {
@@ -31,6 +32,12 @@ type ScrapedNutrition = {
 type ScrapedProductGallery = {
   localImages?: string[];
 };
+
+const confidenceItems = [
+  { title: "WeightWorld sourced", text: "WeightWorld highlights high-quality ingredients and expert-formulated supplements." },
+  { title: "Third-party tested", text: "WeightWorld states that products undergo research and third-party testing before market." },
+  { title: "GMP quality cues", text: "Selected WeightWorld product pages reference GMP-certified manufacturing standards." }
+];
 
 function isSectionHeading(line: string) {
   return (
@@ -116,6 +123,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const galleryImages = scrapedGallery?.localImages?.length ? scrapedGallery.localImages : [product.image];
   const overviewSection = productContent[0];
   const detailSections = productContent.slice(1);
+  const productGoals = getGoalsForSku(product.sku);
+  const orderText = encodeURIComponent([
+    "Hi SahhaDaily! 🌿",
+    "I'd like to order:",
+    "• " + product.name,
+    "• SKU: " + product.sku,
+    "",
+    "My details:",
+    "Name: ",
+    "City: ",
+    "Address: "
+  ].join("\n"));
+  const whatsappHref = "https://wa.me/96170000000?text=" + orderText;
 
   return (
     <main>
@@ -130,7 +150,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <span className="badge">{product.sku}</span>
               {product.label === "bestSeller" && <span className="badge" style={{ background: "var(--green)", color: "#fff" }}>Best Seller</span>}
               {product.label === "lowStock" && <span className="badge" style={{ background: "rgba(180,50,30,0.9)", color: "#fff" }}>Low Stock</span>}
-              {product.label === "new" && <span className="badge" style={{ background: "var(--orange)", color: "#fff" }}>New</span>}
+              {product.label === "new" && <span className="badge" style={{ background: "var(--accent)", color: "#fff" }}>New</span>}
             </div>
             <h1>{product.name}</h1>
             <div className="ratingRow" style={{ marginBottom: 16 }}>
@@ -141,30 +161,73 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </span>
               <span className="ratingCount">({product.reviewCount} reviews)</span>
             </div>
+            <div className="productPriceBlock"><strong>{product.price}</strong><span>Placeholder price · final pricing to confirm</span></div>
             <p className="lead">{product.description}</p>
             <div className="featureList" aria-label="Key product features">
               {product.keyFeatures.map((feature) => (
                 <span key={feature}>{feature}</span>
               ))}
             </div>
-            <a
-              href={`https://wa.me/96170000000?text=${encodeURIComponent(
-                `Hi SahhaDaily! 🌿\nI'd like to order:\n• ${product.name}\n• SKU: ${product.sku}\n\nMy details:\nName: \nCity: \nAddress: `
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btnPrimary"
-              style={{ marginTop: 28, display: "inline-flex" }}
-            >
-              Order on WhatsApp
-            </a>
+            <div className="purchasePanel">
+              <div>
+                <span>Ready to order?</span>
+                <strong>{product.price} · Reserve via WhatsApp</strong>
+              </div>
+              <a
+                href={whatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btnPrimary"
+              >
+                Order on WhatsApp
+              </a>
+            </div>
+
+            <div className="productConfidenceGrid" aria-label="Shopping confidence">
+              {confidenceItems.map((item) => (
+                <div key={item.title}>
+                  <strong>{item.title}</strong>
+                  <span>{item.text}</span>
+                </div>
+              ))}
+            </div>
           </div>
+        </div>
+      </section>
+
+      <section className="productStickyOrder" aria-label="Quick order bar">
+        <div className="container stickyOrderInner">
+          <span>{product.name} · {product.price}</span>
+          <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="btn btnPrimary">Order on WhatsApp</a>
         </div>
       </section>
 
       <section className="section" style={{ paddingTop: 36 }}>
         <div className="container productDetailsShell">
           <div className="productIntro">
+            <div className="productSpecCard">
+              <span className="eyebrow">Quick specs</span>
+              <dl>
+                <div><dt>Format</dt><dd>{product.format}</dd></div>
+                <div><dt>Price</dt><dd>{product.price}</dd></div>
+                <div><dt>Stock</dt><dd>{product.quantity} units</dd></div>
+                <div><dt>Rating</dt><dd>{product.rating} / 5</dd></div>
+                <div><dt>Routine fit</dt><dd>{productGoals.map((goal) => goal.shortLabel).join(", ") || product.category}</dd></div>
+              </dl>
+            </div>
+
+            {productGoals.length > 0 && (
+              <div className="routineFitCard">
+                <span className="eyebrow">Fits these routines</span>
+                {productGoals.map((goal) => (
+                  <div key={goal.id}>
+                    <strong>{goal.label}</strong>
+                    <p>{goal.description}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+
             {overviewSection && (
               <>
                 <span className="eyebrow">Product overview</span>

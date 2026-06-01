@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { ProductFinder } from "@/components/ProductFinder";
 import { ShopFilters } from "@/components/ShopFilters";
 
 export const metadata = {
@@ -50,6 +51,9 @@ export default function ShopPage() {
             </div>
           ))}
         </div>
+
+        {/* ── Guided routine finder ── */}
+        <ProductFinder />
 
         {/* ── Catalog ── */}
         <Suspense fallback={<p>Loading products...</p>}>
