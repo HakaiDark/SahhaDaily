@@ -264,7 +264,7 @@ h3 { font-size: 1.32rem; line-height: 1.2; }
 }
 .labelBestSeller { background: var(--green); color: #fff; }
 .labelPopular    { background: rgba(31,91,68,0.12); color: var(--green); border: 1px solid rgba(31,91,68,0.22); }
-.labelNew        { background: var(--orange); color: #fff; }
+.labelNew        { background: var(--accent); color: #fff; }
 .labelLowStock   { background: rgba(180,50,30,0.92); color: #fff; }
 .productImage {
   aspect-ratio: 1 / 1;
@@ -388,7 +388,7 @@ h3 { font-size: 1.32rem; line-height: 1.2; }
   margin-bottom: 10px;
   direction: rtl;
 }
-.shopHeroAr span { color: var(--orange); }
+.shopHeroAr span { color: var(--accent); }
 .shopHeroSub {
   color: var(--muted);
   font-size: 1.02rem;
@@ -1087,4 +1087,342 @@ h3 { font-size: 1.32rem; line-height: 1.2; }
     transition: none !important;
     transform: none !important;
   }
+}
+
+
+/* Competitive merchandising layer */
+.finderSection {
+  padding: 72px 0;
+}
+.shopHero + .shopTrust + .finderSection {
+  padding-top: 0;
+}
+.finderShell {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.7fr) minmax(0, 1.3fr);
+  gap: 28px;
+  align-items: stretch;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  padding: 28px;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(205, 230, 213, 0.55), transparent 34%),
+    radial-gradient(circle at 100% 20%, rgba(211, 120, 73, 0.14), transparent 30%),
+    rgba(255, 255, 255, 0.68);
+  box-shadow: 0 18px 45px rgba(24, 35, 29, 0.06);
+}
+.finderShell h2 {
+  margin: 8px 0 14px;
+}
+.finderCard {
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: rgba(255, 254, 250, 0.82);
+  padding: 18px;
+  box-shadow: var(--shadow-card);
+}
+.finderControls,
+.quickGoalGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.finderControls button,
+.quickGoalGrid button {
+  appearance: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--green);
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 850;
+  padding: 9px 12px;
+}
+.finderControls button.isActive,
+.quickGoalGrid button.isActive {
+  background: var(--green);
+  color: #fff;
+  border-color: var(--green);
+}
+.finderSelect {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0;
+  color: var(--green);
+  font-weight: 850;
+}
+.finderSelect select {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--sand);
+  color: var(--ink);
+  padding: 0 12px;
+}
+.finderResult {
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+.finderResult > span {
+  color: var(--ink);
+  font-weight: 900;
+}
+.finderResult > p {
+  color: var(--muted);
+  margin: 6px 0 14px;
+}
+.finderProducts {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.finderProducts a {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.68);
+  padding: 12px;
+}
+.finderProducts strong {
+  color: var(--green);
+  font-size: 0.92rem;
+}
+.finderProducts small {
+  color: var(--muted);
+  white-space: nowrap;
+}
+.bundleGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+.bundleCard {
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(205, 230, 213, 0.52), transparent 30%),
+    rgba(255, 255, 255, 0.76);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+}
+.bundleCard h3 {
+  margin: 8px 0 10px;
+}
+.bundleCard p {
+  color: var(--muted);
+}
+.bundleProducts {
+  display: grid;
+  gap: 8px;
+  margin: 18px 0;
+}
+.bundleProducts a {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 8px;
+}
+.bundleProducts span {
+  color: var(--green);
+  font-weight: 850;
+}
+.bundleProducts small {
+  color: var(--muted);
+  font-weight: 800;
+}
+.quickGoalGrid {
+  margin-top: 16px;
+}
+.filterToggle {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 16px;
+  color: var(--green);
+  font-size: 0.88rem;
+  font-weight: 850;
+}
+.filterToggle input {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--green);
+}
+.purchasePanel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 28px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.78);
+  padding: 14px;
+  box-shadow: var(--shadow-card);
+}
+.purchasePanel span,
+.productConfidenceGrid span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+.purchasePanel strong {
+  color: var(--green);
+  font-size: 1.02rem;
+}
+.productConfidenceGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+.productConfidenceGrid div,
+.productSpecCard,
+.routineFitCard {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  padding: 16px;
+}
+.productConfidenceGrid strong,
+.routineFitCard strong {
+  display: block;
+  color: var(--green);
+  font-size: 0.92rem;
+  margin-bottom: 4px;
+}
+.productStickyOrder {
+  position: sticky;
+  top: 107px;
+  z-index: 16;
+  border-block: 1px solid var(--line);
+  background: rgba(255, 254, 250, 0.88);
+  backdrop-filter: blur(14px);
+}
+.stickyOrderInner {
+  min-height: 66px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.stickyOrderInner span {
+  color: var(--green);
+  font-weight: 900;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.productSpecCard {
+  margin-bottom: 16px;
+}
+.productSpecCard dl {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0 0;
+}
+.productSpecCard dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 8px;
+}
+.productSpecCard dl div:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.productSpecCard dt {
+  color: var(--muted);
+  font-weight: 800;
+}
+.productSpecCard dd {
+  color: var(--green);
+  font-weight: 900;
+  margin: 0;
+  text-align: right;
+}
+.routineFitCard {
+  margin-bottom: 20px;
+}
+.routineFitCard div {
+  margin-top: 12px;
+}
+.routineFitCard p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 980px) {
+  .finderShell,
+  .bundleGrid {
+    grid-template-columns: 1fr;
+  }
+  .productStickyOrder {
+    top: 101px;
+  }
+}
+
+@media (max-width: 760px) {
+  .finderSection {
+    padding: 44px 0;
+  }
+  .finderShell {
+    padding: 18px;
+    border-radius: 20px;
+  }
+  .purchasePanel,
+  .stickyOrderInner,
+  .finderProducts a,
+  .bundleProducts a {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .productConfidenceGrid {
+    grid-template-columns: 1fr;
+  }
+  .productStickyOrder {
+    bottom: 0;
+    top: auto;
+  }
+  .stickyOrderInner {
+    padding: 10px 0;
+  }
+  .stickyOrderInner .btn {
+    width: 100%;
+  }
+}
+
+
+/* Placeholder pricing */
+.priceLine {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 4px 0 10px;
+}
+.priceLine strong,
+.productPriceBlock strong {
+  color: var(--green);
+  font-size: 1.18rem;
+  font-weight: 950;
+}
+.priceLine span,
+.productPriceBlock span {
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 750;
+}
+.productPriceBlock {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 16px;
+}
+.productPriceBlock strong {
+  font-size: 1.65rem;
 }
