@@ -161,7 +161,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </span>
               <span className="ratingCount">({product.reviewCount} reviews)</span>
             </div>
-            <div className="productPriceBlock"><strong>{product.price}</strong><span>Placeholder price · final pricing to confirm</span></div>
+            <div className="productPriceBlock"><strong>{product.price}</strong><span>Price</span></div>
             <p className="lead">{product.description}</p>
             <div className="featureList" aria-label="Key product features">
               {product.keyFeatures.map((feature) => (
