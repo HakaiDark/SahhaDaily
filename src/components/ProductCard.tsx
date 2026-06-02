@@ -51,7 +51,7 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
         <div className="priceLine">
           <strong>{product.price}</strong>
-          <span>Placeholder price</span>
+          <span>Price</span>
         </div>
         {chip && <p className="featureChip">{chip}</p>}
         <div className="productFooter">
