@@ -14,10 +14,10 @@ export function RoutineBundles() {
       <div className="container">
         <div className="sectionHead">
           <div>
-            <span className="eyebrow">Routine stacks</span>
-            <h2>Curated supplement bundles</h2>
+            <span className="eyebrow">Routine Stacks</span>
+            <h2>Curated Supplement <span className="hl">Bundles</span></h2>
           </div>
-          <p className="lead">Top supplement shops make routines easier to buy. These stacks guide customers without overwhelming them.</p>
+          <p className="lead">Curated Stacks That Make A Daily Routine Easy To Build — Without The Overwhelm.</p>
         </div>
 
         <div className="bundleGrid">
@@ -46,7 +46,7 @@ export function RoutineBundles() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Ask for this stack
+                  Ask For This Stack
                 </a>
               </article>
             );

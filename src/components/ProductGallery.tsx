@@ -67,7 +67,7 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
             priority
             sizes="(max-width: 980px) 100vw, 48vw"
           />
-          <span className="zoomHint">Click to zoom</span>
+          <span className="zoomHint">Click To Zoom</span>
         </button>
         {hasMultipleImages && (
           <button

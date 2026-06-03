@@ -4,15 +4,15 @@ import Link from "next/link";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SahhaDaily Lebanon | Premium Wellness Supplements",
+  title: "SahhaDaily | Premium Wellness Supplements",
   description: "Explore SahhaDaily supplements for daily wellness, beauty, immunity, energy, and active lifestyles."
 };
 
 const urgencyMessages = [
-  "🚚 Free delivery on orders above a minimum order value · توصيل مجاني",
-  "🇬🇧 Directly sourced from WeightWorld UK · بضاعة أصلية من بريطانيا",
-  "✅ Verified originals only · منتجات أصلية مضمونة 100%",
-  "💬 Order on WhatsApp — fast and easy · اطلب على واتساب",
+  "🚚 Free Delivery On Qualifying Orders · توصيل مجاني",
+  "🇬🇧 Directly Sourced From WeightWorld UK · بضاعة أصلية من بريطانيا",
+  "✅ Verified Originals Only · منتجات أصلية مضمونة 100%",
+  "💬 Order On WhatsApp — Fast And Easy · اطلب على واتساب",
 ];
 
 function UrgencyBanner() {
@@ -47,7 +47,7 @@ function BrandLogo() {
   return (
     <>
       <Image
-        src="/brand/sahhadaily-icon.svg"
+        src="/brand/sahhadaily-icon.png"
         alt=""
         width={54}
         height={54}
@@ -56,7 +56,7 @@ function BrandLogo() {
       />
       <span className="brandWords" aria-hidden="true">
         <span className="brandLatin">Sahha<span>Daily</span></span>
-        <span className="brandArabic">صحة دايلي</span>
+        <span className="brandArabic">صحة <span>دايلي</span></span>
       </span>
     </>
   );
@@ -66,7 +66,7 @@ function Header() {
   return (
     <header className="siteHeader">
       <div className="container headerInner">
-        <Link href="/" className="brandMark" aria-label="SahhaDaily Lebanon home">
+        <Link href="/" className="brandMark" aria-label="SahhaDaily home">
           <BrandLogo />
         </Link>
 
@@ -96,15 +96,15 @@ function Footer() {
     <footer className="footer" id="contact">
       <div className="container footerGrid">
         <div>
-          <Link href="/" className="brandMark" aria-label="SahhaDaily Lebanon home">
+          <Link href="/" className="brandMark" aria-label="SahhaDaily home">
             <BrandLogo />
           </Link>
           <p style={{ marginTop: 16, maxWidth: 520 }}>
-            Daily support, better you. Premium supplements for everyday wellness in Lebanon.
+            Daily Support, Better You. Premium Supplements For Everyday Wellness.
           </p>
         </div>
         <div>
-          <p style={{ fontWeight: 800, color: "var(--ink)", marginBottom: 12 }}>Get in touch</p>
+          <p style={{ fontWeight: 800, color: "var(--ink)", marginBottom: 12 }}>Get In Touch</p>
           <p style={{ marginBottom: 8 }}>
             <a
               href="https://wa.me/96170000000"
@@ -143,7 +143,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cairo:wght@400;600;700;900&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap"
           rel="stylesheet"
         />
       </head>

@@ -27,10 +27,10 @@ export function ProductFinder() {
     <section className="finderSection" id="finder">
       <div className="container finderShell">
         <div>
-          <span className="eyebrow">Find your routine</span>
-          <h2>Not sure where to start?</h2>
+          <span className="eyebrow">Find Your Routine</span>
+          <h2>Not Sure Where To <span className="hl">Start?</span></h2>
           <p className="lead">
-            Choose a wellness priority and we will narrow the catalog into a simple routine.
+            Choose A Wellness Priority And We Will Narrow The Catalog Into A Simple Routine.
           </p>
         </div>
 
@@ -49,7 +49,7 @@ export function ProductFinder() {
           </div>
 
           <label className="finderSelect">
-            Preferred format
+            Preferred Format
             <select value={format} onChange={(event) => setFormat(event.target.value)}>
               {formatOptions.map((item) => <option key={item}>{item}</option>)}
             </select>
@@ -66,10 +66,10 @@ export function ProductFinder() {
                     <small>{product.format} · {product.sku}</small>
                   </Link>
                 )) : (
-                  <p>No exact format match. Try “Any format” for this goal.</p>
+                  <p>No Exact Format Match. Try “Any Format” For This Goal.</p>
                 )}
               </div>
-              <Link href={shopHref} className="btn btnPrimary">Shop this routine</Link>
+              <Link href={shopHref} className="btn btnPrimary">Shop This Routine</Link>
             </div>
           )}
         </div>

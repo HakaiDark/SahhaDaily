@@ -23,12 +23,12 @@ export function HeroMotion() {
         />
       </motion.div>
       <motion.div className="floatCard floatOne motion-safe" style={{ y: cardOneY }}>
-        Delivered in Lebanon
-        <small>free shipping on orders above X</small>
+        Delivered To Your Door
+        <small>Fast, Reliable Shipping</small>
       </motion.div>
       <motion.div className="floatCard floatTwo motion-safe" style={{ y: cardTwoY }}>
-        Science-backed
-        <small>quality-verified formulas</small>
+        Science-Backed
+        <small>Quality-Verified Formulas</small>
       </motion.div>
     </div>
   );

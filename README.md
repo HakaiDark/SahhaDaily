@@ -9,9 +9,9 @@ Modern responsive Next.js website for a wellness and supplements store.
 - Product detail pages using dynamic routes
 - Motion system with Framer Motion
 - Reduced motion support through CSS and Framer Motion hooks
-- Product images extracted and cropped from the supplied WeightWorld catalog
-- Product data based on the initial Lebanon batch spreadsheet
-- Scratched SKU 9 excluded from the active product list
+- Product images scraped directly from the WeightWorld UK product pages (see `Information/*.md` for the source links)
+- 14 active products, cross-referenced against the `Information/` product briefs
+- Background-removed packshots generated via `npm run images:immersive`
 
 ## Run locally
 

@@ -24,7 +24,7 @@ function Stars({ rating }: { rating: number }) {
 
 export function ProductCard({ product }: { product: Product }) {
   const label = product.label ? LABEL_MAP[product.label] : null;
-  const chip  = product.keyFeatures[0];
+  const displayPrice = product.price === "TBA" ? "Price On Request" : product.price;
 
   return (
     <article className="productCard">
@@ -50,13 +50,11 @@ export function ProductCard({ product }: { product: Product }) {
           <span className="ratingCount">({product.reviewCount})</span>
         </div>
         <div className="priceLine">
-          <strong>{product.price}</strong>
-          <span>Price</span>
+          <strong>{displayPrice}</strong>
         </div>
-        {chip && <p className="featureChip">{chip}</p>}
         <div className="productFooter">
           <span className="sku">{product.sku}</span>
-          <Link className="smallLink" href={`/product/${product.slug}`}>View details →</Link>
+          <Link className="smallLink" href={`/product/${product.slug}`}>View Details →</Link>
         </div>
       </div>
     </article>
