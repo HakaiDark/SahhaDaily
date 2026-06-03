@@ -1,18 +1,22 @@
 :root {
-  --green: #1f5b44;
-  --deep-green: #123c2e;
-  --mint: #cde6d5;
-  --sand: #f2eee5;
-  --paper: #fffefa;
-  --accent: #d37849;
-  --ink: #18231d;
-  --muted: #5f6d64;
-  --line: rgba(31, 91, 68, 0.16);
+  /* Brand palette — SahhaDaily brand board */
+  --green: #2E5B3F;       /* Herbal Green */
+  --deep-green: #1F4632;  /* Deepened herbal for contrast */
+  --sage: #A7C49A;        /* Sage Green */
+  --mint: #DCE8D2;        /* Soft sage tint */
+  --beige: #DCCCB7;       /* Warm Beige */
+  --sand: #EFE7DA;        /* Warm beige tint (inputs, fills) */
+  --ivory: #F7F6F2;       /* Soft Ivory */
+  --paper: #FBFAF5;
+  --accent: #E07A4F;      /* Vitality Orange */
+  --ink: #1E2A22;
+  --muted: #5F6D64;
+  --line: rgba(46, 91, 63, 0.16);
   --card: #ffffff;
   --radius-lg: 18px;
   --radius-md: 12px;
-  --shadow-soft: 0 24px 70px rgba(26, 52, 40, 0.12);
-  --shadow-card: 0 14px 35px rgba(24, 35, 29, 0.08);
+  --shadow-soft: 0 24px 70px rgba(31, 70, 50, 0.12);
+  --shadow-card: 0 14px 35px rgba(30, 42, 34, 0.08);
   --max: 1180px;
 }
 
@@ -20,10 +24,14 @@
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
-  background: linear-gradient(180deg, #fbfaf5 0%, #f6f8f0 44%, #fffefa 100%);
+  background:
+    radial-gradient(circle at 10% -6%, rgba(167, 196, 154, 0.22), transparent 40%),
+    radial-gradient(circle at 94% 2%, rgba(224, 122, 79, 0.08), transparent 36%),
+    linear-gradient(180deg, #F7F6F2 0%, #F1EEE4 48%, #FBFAF5 100%);
+  background-attachment: fixed;
   color: var(--ink);
-  font-family: "Avenir Next", "Segoe UI", sans-serif;
-  line-height: 1.5;
+  font-family: 'Tajawal', 'Cairo', 'Segoe UI', sans-serif;
+  line-height: 1.6;
 }
 
 a { color: inherit; text-decoration: none; }
@@ -40,14 +48,21 @@ img { max-width: 100%; display: block; }
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
+.eyebrow .g { color: var(--green); }
 
 h1, h2, h3, p { margin-top: 0; }
 h1, h2, h3 {
-  font-family: "Playfair Display", "Iowan Old Style", "Palatino Linotype", serif;
+  font-family: 'Cairo', 'Tajawal', sans-serif;
+  font-weight: 800;
+  color: var(--deep-green);
 }
-h1 { font-size: 4.7rem; line-height: 0.98; letter-spacing: 0; }
-h2 { font-size: 3.2rem; line-height: 1.04; letter-spacing: 0; }
-h3 { font-size: 1.32rem; line-height: 1.2; }
+h1 { font-size: 4.3rem; line-height: 1.02; letter-spacing: -0.015em; font-weight: 900; }
+h2 { font-size: 3rem; line-height: 1.08; letter-spacing: -0.012em; }
+h3 { font-size: 1.3rem; line-height: 1.22; }
+
+/* Two-tone wordmark treatment: deep green base + vitality orange accent */
+.hl { color: var(--accent); }
+h1 em, h2 em, h3 em, .hl em { font-style: normal; color: var(--accent); }
 
 .lead { color: var(--muted); font-size: 1.08rem; max-width: 620px; }
 
@@ -65,11 +80,12 @@ h3 { font-size: 1.32rem; line-height: 1.2; }
 }
 .arabicTag em {
   font-style: normal;
-  font-family: "Playfair Display", serif;
+  font-family: 'Tajawal', sans-serif;
   font-size: 0.94rem;
   color: var(--muted);
-  font-weight: 400;
+  font-weight: 500;
 }
+.arabicTag .o { color: var(--accent); font-weight: 700; }
 
 .btn {
   display: inline-flex;
@@ -109,8 +125,8 @@ h3 { font-size: 1.32rem; line-height: 1.2; }
   gap: 10px;
 }
 .brandIcon {
-  width: 44px;
-  height: 44px;
+  width: 54px;
+  height: 54px;
 }
 .brandWords {
   display: grid;
@@ -119,9 +135,10 @@ h3 { font-size: 1.32rem; line-height: 1.2; }
 }
 .brandLatin {
   color: var(--green);
-  font-family: "Iowan Old Style", "Palatino Linotype", serif;
+  font-family: 'Cairo', 'Tajawal', sans-serif;
   font-size: 1.38rem;
-  font-weight: 700;
+  font-weight: 900;
+  letter-spacing: -0.01em;
 }
 .brandLatin span {
   color: var(--accent);
@@ -131,6 +148,9 @@ h3 { font-size: 1.32rem; line-height: 1.2; }
   font-size: 0.84rem;
   font-weight: 700;
   margin-top: 2px;
+}
+.brandArabic span {
+  color: var(--accent);
 }
 
 .navLinks {
@@ -170,8 +190,20 @@ h3 { font-size: 1.32rem; line-height: 1.2; }
 .mobileMenu nav a { padding: 12px 14px; border-bottom: 1px solid var(--line); }
 .mobileMenu nav a:last-child { border-bottom: 0; }
 
-.hero { padding: 64px 0 84px; overflow: clip; }
-.heroGrid { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 54px; align-items: center; }
+.hero { padding: 64px 0 84px; overflow: clip; position: relative; }
+.hero::before {
+  content: "";
+  position: absolute;
+  top: -70px;
+  right: -90px;
+  width: 420px;
+  height: 420px;
+  background: url("/brand/sahhadaily-icon.png") no-repeat center / contain;
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 0;
+}
+.heroGrid { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 54px; align-items: center; position: relative; z-index: 1; }
 .heroActions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
 .heroVisual { position: relative; min-height: 590px; }
 .heroImageWrap {
@@ -304,7 +336,8 @@ h3 { font-size: 1.32rem; line-height: 1.2; }
   font-weight: 800;
 }
 .productBody h3 {
-  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  font-family: 'Tajawal', 'Cairo', sans-serif;
+  font-weight: 700;
   font-size: 1rem;
   letter-spacing: 0;
   margin-bottom: 6px;
@@ -352,10 +385,21 @@ h3 { font-size: 1.32rem; line-height: 1.2; }
 .brandPanel {
   border-radius: var(--radius-lg);
   padding: 32px;
-  background: var(--green);
+  background: linear-gradient(155deg, var(--green) 0%, var(--deep-green) 100%);
   color: #fff;
   overflow: hidden;
   position: relative;
+}
+.brandPanel::before {
+  content: "";
+  position: absolute;
+  top: -40px;
+  left: -50px;
+  width: 240px;
+  height: 240px;
+  background: url("/brand/sahhadaily-icon.png") no-repeat center / contain;
+  opacity: 0.12;
+  pointer-events: none;
 }
 .brandPanel::after {
   content: "";
@@ -365,8 +409,11 @@ h3 { font-size: 1.32rem; line-height: 1.2; }
   right: -80px;
   bottom: -90px;
   border-radius: 50%;
-  background: rgba(211, 120, 73, 0.34);
+  background: radial-gradient(circle, rgba(224, 122, 79, 0.40), rgba(167, 196, 154, 0.10) 70%);
 }
+.brandPanel > * { position: relative; z-index: 1; }
+.brandPanel h1, .brandPanel h2, .brandPanel h3 { color: #fff; }
+.brandPanel .hl { color: var(--sage); }
 .principles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
 .principle { padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--line); background: rgba(255, 255, 255, 0.7); }
 
@@ -379,7 +426,7 @@ h3 { font-size: 1.32rem; line-height: 1.2; }
   max-width: 680px;
   margin: 0 auto;
 }
-.shopHero h1 em { font-style: italic; color: var(--green); }
+.shopHero h1 em { font-style: normal; color: var(--accent); }
 .shopHeroAr {
   font-family: 'Cairo', sans-serif;
   font-size: 1.35rem;
@@ -1296,12 +1343,23 @@ h3 { font-size: 1.32rem; line-height: 1.2; }
   margin-bottom: 4px;
 }
 .productStickyOrder {
-  position: sticky;
-  top: 107px;
+  position: fixed;
+  top: 70px;
+  left: 0;
+  right: 0;
   z-index: 16;
   border-block: 1px solid var(--line);
-  background: rgba(255, 254, 250, 0.88);
+  background: rgba(251, 250, 245, 0.92);
   backdrop-filter: blur(14px);
+  transform: translateY(-130%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 240ms ease, opacity 240ms ease;
+}
+.productStickyOrder.isVisible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
 }
 .stickyOrderInner {
   min-height: 66px;
@@ -1363,7 +1421,7 @@ h3 { font-size: 1.32rem; line-height: 1.2; }
     grid-template-columns: 1fr;
   }
   .productStickyOrder {
-    top: 101px;
+    top: 70px;
   }
 }
 
@@ -1386,8 +1444,7 @@ h3 { font-size: 1.32rem; line-height: 1.2; }
     grid-template-columns: 1fr;
   }
   .productStickyOrder {
-    bottom: 0;
-    top: auto;
+    top: 64px;
   }
   .stickyOrderInner {
     padding: 10px 0;
@@ -1399,6 +1456,59 @@ h3 { font-size: 1.32rem; line-height: 1.2; }
 
 
 
+
+/* Curated benefit / feature checklists */
+.checkList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 11px;
+}
+.checkList li {
+  position: relative;
+  padding-left: 30px;
+  color: var(--ink);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+.checkList li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  background: var(--mint);
+  color: var(--green);
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+.detailBenefits {
+  margin: 22px 0 6px;
+}
+
+/* PDP trust badge chips */
+.trustChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 22px;
+}
+.trustChips span {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 7px 13px;
+  font-size: 0.82rem;
+  font-weight: 750;
+  color: var(--ink);
+}
 
 /* TBA pricing */
 .priceLine {

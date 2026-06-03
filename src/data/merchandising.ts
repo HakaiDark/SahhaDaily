@@ -54,8 +54,8 @@ export const wellnessGoals: WellnessGoal[] = [
     id: "family",
     label: "Family gummies",
     shortLabel: "Family",
-    description: "Easy gummy formats for men, women, and children who prefer chewable supplements.",
-    skus: ["CC0543", "CC0544", "CC0513"]
+    description: "Easy gummy formats for women and children who prefer chewable supplements.",
+    skus: ["CC0544", "CC0513"]
   }
 ];
 

@@ -3,18 +3,13 @@ import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { ProductCard } from "@/components/ProductCard";
 import { ProductGallery } from "@/components/ProductGallery";
+import { StickyOrderBar } from "@/components/StickyOrderBar";
 import { getProductBySlug, getRelatedProducts, products } from "@/data/products";
 import { getGoalsForSku } from "@/data/merchandising";
 import scrapedProducts from "@/data/weightworld-scraped-launch-products.json";
 
 type ProductPageProps = {
   params: Promise<{ slug: string }>;
-};
-
-type ProductContentSection = {
-  heading: string;
-  paragraphs: string[];
-  items: string[];
 };
 
 type ScrapedNutrition = {
@@ -33,49 +28,7 @@ type ScrapedProductGallery = {
   localImages?: string[];
 };
 
-const confidenceItems = [
-  { title: "WeightWorld sourced", text: "WeightWorld highlights high-quality ingredients and expert-formulated supplements." },
-  { title: "Third-party tested", text: "WeightWorld states that products undergo research and third-party testing before market." },
-  { title: "GMP quality cues", text: "Selected WeightWorld product pages reference GMP-certified manufacturing standards." }
-];
-
-function isSectionHeading(line: string) {
-  return (
-    line.endsWith("?") ||
-    /^(What|Benefits|Why|How|Who|Key Ingredients|Directions|Nutritional|Supplement Facts)/i.test(line)
-  );
-}
-
-function splitProductContent(text: string): ProductContentSection[] {
-  const lines = text
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean);
-
-  const sections: ProductContentSection[] = [];
-  let current: ProductContentSection | undefined;
-
-  for (const line of lines) {
-    if (isSectionHeading(line)) {
-      current = { heading: line, paragraphs: [], items: [] };
-      sections.push(current);
-      continue;
-    }
-
-    if (!current) {
-      current = { heading: "Product overview", paragraphs: [], items: [] };
-      sections.push(current);
-    }
-
-    if (line.length < 150 && !line.endsWith(".")) {
-      current.items.push(line);
-    } else {
-      current.paragraphs.push(line);
-    }
-  }
-
-  return sections;
-}
+const trustBadges = ["🇬🇧 UK-Sourced", "🔬 Third-Party Tested", "🌿 GMP Quality", "✅ Verified Original"];
 
 function ProductAccordion({
   title,
@@ -102,7 +55,7 @@ export async function generateMetadata({ params }: ProductPageProps) {
   const { slug } = await params;
   const product = getProductBySlug(slug);
   return {
-    title: product ? `${product.name} | SahhaDaily Lebanon` : "Product | SahhaDaily Lebanon",
+    title: product ? `${product.name} | SahhaDaily` : "Product | SahhaDaily",
     description: product?.description
   };
 }
@@ -117,13 +70,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const relatedProducts = getRelatedProducts(product);
   const scrapedProduct = scrapedProducts.products.find((item) => item.sku === product.sku);
-  const productContent = splitProductContent(scrapedProduct?.descriptionText ?? "");
   const nutrition = scrapedProduct?.nutrition as ScrapedNutrition;
   const scrapedGallery = scrapedProduct as ScrapedProductGallery | undefined;
   const galleryImages = scrapedGallery?.localImages?.length ? scrapedGallery.localImages : [product.image];
-  const overviewSection = productContent[0];
-  const detailSections = productContent.slice(1);
   const productGoals = getGoalsForSku(product.sku);
+  const displayPrice = product.price === "TBA" ? "Price On Request" : product.price;
   const orderText = encodeURIComponent([
     "Hi SahhaDaily! 🌿",
     "I'd like to order:",
@@ -143,7 +94,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <div className="container productHeroGrid">
           <ProductGallery images={galleryImages} name={product.name} />
           <div className="detailPanel">
-            <Link href="/shop" className="smallLink">← Back to shop</Link>
+            <Link href="/shop" className="smallLink">← Back To Shop</Link>
             <div className="metaList">
               <span className="badge">{product.category}</span>
               <span className="badge">{product.format}</span>
@@ -159,19 +110,21 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 {product.rating % 1 >= 0.5 ? "½" : ""}
                 {"☆".repeat(5 - Math.floor(product.rating) - (product.rating % 1 >= 0.5 ? 1 : 0))}
               </span>
-              <span className="ratingCount">({product.reviewCount} reviews)</span>
+              <span className="ratingCount">{product.rating} · {product.reviewCount} verified reviews</span>
             </div>
-            <div className="productPriceBlock"><strong>{product.price}</strong><span>Price</span></div>
+            <div className="productPriceBlock"><strong>{displayPrice}</strong><span>Reserve your bottle on WhatsApp</span></div>
             <p className="lead">{product.description}</p>
-            <div className="featureList" aria-label="Key product features">
-              {product.keyFeatures.map((feature) => (
-                <span key={feature}>{feature}</span>
+
+            <ul className="checkList detailBenefits" aria-label="Key benefits">
+              {product.benefits.slice(0, 3).map((benefit) => (
+                <li key={benefit}>{benefit}</li>
               ))}
-            </div>
+            </ul>
+
             <div className="purchasePanel">
               <div>
-                <span>Ready to order?</span>
-                <strong>{product.price} · Reserve via WhatsApp</strong>
+                <span>Ready To Order?</span>
+                <strong>{displayPrice} · Reserve Via WhatsApp</strong>
               </div>
               <a
                 href={whatsappHref}
@@ -179,46 +132,37 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 rel="noopener noreferrer"
                 className="btn btnPrimary"
               >
-                Order on WhatsApp
+                Order On WhatsApp
               </a>
             </div>
 
-            <div className="productConfidenceGrid" aria-label="Shopping confidence">
-              {confidenceItems.map((item) => (
-                <div key={item.title}>
-                  <strong>{item.title}</strong>
-                  <span>{item.text}</span>
-                </div>
+            <div className="trustChips" aria-label="Shopping confidence">
+              {trustBadges.map((badge) => (
+                <span key={badge}>{badge}</span>
               ))}
             </div>
           </div>
         </div>
       </section>
 
-      <section className="productStickyOrder" aria-label="Quick order bar">
-        <div className="container stickyOrderInner">
-          <span>{product.name} · {product.price}</span>
-          <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="btn btnPrimary">Order on WhatsApp</a>
-        </div>
-      </section>
+      <StickyOrderBar name={product.name} price={displayPrice} href={whatsappHref} />
 
       <section className="section" style={{ paddingTop: 36 }}>
         <div className="container productDetailsShell">
           <div className="productIntro">
             <div className="productSpecCard">
-              <span className="eyebrow">Quick specs</span>
+              <span className="eyebrow">Quick Specs</span>
               <dl>
                 <div><dt>Format</dt><dd>{product.format}</dd></div>
-                <div><dt>Price</dt><dd>{product.price}</dd></div>
-                <div><dt>Stock</dt><dd>{product.quantity} units</dd></div>
                 <div><dt>Rating</dt><dd>{product.rating} / 5</dd></div>
-                <div><dt>Routine fit</dt><dd>{productGoals.map((goal) => goal.shortLabel).join(", ") || product.category}</dd></div>
+                <div><dt>Price</dt><dd>{displayPrice}</dd></div>
+                <div><dt>Routine Fit</dt><dd>{productGoals.map((goal) => goal.shortLabel).join(", ") || product.category}</dd></div>
               </dl>
             </div>
 
             {productGoals.length > 0 && (
               <div className="routineFitCard">
-                <span className="eyebrow">Fits these routines</span>
+                <span className="eyebrow">Fits These Routines</span>
                 {productGoals.map((goal) => (
                   <div key={goal.id}>
                     <strong>{goal.label}</strong>
@@ -228,32 +172,30 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </div>
             )}
 
-            {overviewSection && (
-              <>
-                <span className="eyebrow">Product overview</span>
-                <h2>{overviewSection.heading}</h2>
-                {overviewSection.paragraphs.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
-                ))}
-              </>
+            {product.whyUse.length > 0 && (
+              <div className="routineFitCard">
+                <span className="eyebrow">Why Choose This</span>
+                <ul className="checkList">
+                  {product.whyUse.map((reason) => <li key={reason}>{reason}</li>)}
+                </ul>
+              </div>
             )}
           </div>
 
           <div className="productAccordions">
-            {detailSections.map((section, index) => (
-              <ProductAccordion key={section.heading} title={section.heading} open={index === 0}>
-                {section.paragraphs.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
-                ))}
-                {section.items.length > 0 && (
-                  <ul>
-                    {section.items.map((item) => <li key={item}>{item}</li>)}
-                  </ul>
-                )}
-              </ProductAccordion>
-            ))}
+            <ProductAccordion title="Benefits" open>
+              <ul className="checkList">
+                {product.benefits.map((benefit) => <li key={benefit}>{benefit}</li>)}
+              </ul>
+            </ProductAccordion>
 
-            <ProductAccordion title="How to use">
+            <ProductAccordion title="Key Features">
+              <ul className="checkList">
+                {product.keyFeatures.map((feature) => <li key={feature}>{feature}</li>)}
+              </ul>
+            </ProductAccordion>
+
+            <ProductAccordion title="How To Use">
               <p>{product.howToUse}</p>
             </ProductAccordion>
 
@@ -261,14 +203,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <p>{nutrition?.otherIngredients || product.ingredients}</p>
             </ProductAccordion>
 
-            <ProductAccordion title="Nutritional information">
+            <ProductAccordion title="Nutritional Information">
               {nutrition?.serving && <p className="servingText">{nutrition.serving}</p>}
               {nutrition?.rows && nutrition.rows.length > 0 ? (
                 <div className="nutritionTableWrap">
                   <table className="nutritionTable">
                     <thead>
                       <tr>
-                        <th>Amount per serving</th>
+                        <th>Amount Per Serving</th>
                         <th>Amount</th>
                         <th>%NRV</th>
                       </tr>
@@ -285,13 +227,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   </table>
                 </div>
               ) : (
-                <ul>
+                <ul className="checkList">
                   {product.nutritionalInfo.map((item) => <li key={item}>{item}</li>)}
                 </ul>
               )}
             </ProductAccordion>
 
-            <ProductAccordion title="Advice and storage">
+            <ProductAccordion title="Advice And Storage">
               <p>{nutrition?.advice || product.safety}</p>
               {nutrition?.storage && <p>{nutrition.storage}</p>}
             </ProductAccordion>
@@ -304,8 +246,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <div className="container">
             <div className="sectionHead">
               <div>
-                <span className="eyebrow">Related products</span>
-                <h2>You may also like</h2>
+                <span className="eyebrow">Related Products</span>
+                <h2>You May Also <span className="hl">Like</span></h2>
               </div>
             </div>
             <div className="productGrid">
