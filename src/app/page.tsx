@@ -4,6 +4,7 @@ import { ProductFinder } from "@/components/ProductFinder";
 import { ProductCard } from "@/components/ProductCard";
 import { Reveal } from "@/components/Reveal";
 import { RoutineBundles } from "@/components/RoutineBundles";
+import { Fern, Cedar, Leaf, Vine, BotanicalDivider } from "@/components/Botanical";
 import { categories, products } from "@/data/products";
 
 const categorySections = categories
@@ -17,6 +18,8 @@ export default function HomePage() {
   return (
     <main>
       <section className="hero">
+        <Fern className="botanical heroFern botanicalFloat slow" />
+        <Cedar className="botanical heroCedar botanicalFloat delay" />
         <div className="container heroGrid">
           <Reveal className="heroCopy">
             <span className="eyebrow"><span className="g">Sahha</span>Daily · <span className="g">صحة</span> دايلي</span>
@@ -46,6 +49,8 @@ export default function HomePage() {
       <ProductFinder />
 
       <RoutineBundles />
+
+      <div className="container"><BotanicalDivider /></div>
 
       <section className="section" id="categories">
         <div className="container">
@@ -89,9 +94,14 @@ export default function HomePage() {
         </section>
       ))}
 
+      <div className="container"><BotanicalDivider /></div>
+
       <section className="section" id="about">
         <div className="container whyGrid">
           <Reveal className="brandPanel">
+            <Vine className="botanical panelVine botanicalFloat slow" />
+            <Leaf className="botanical panelLeaf" />
+            <Cedar className="botanical panelCedar botanicalFloat delay" />
             <span className="eyebrow" style={{ color: "#f1b094" }}>About SahhaDaily</span>
             <h2>Simple Product Discovery With Clear <span className="hl">Supplement Information</span>.</h2>
             <p>

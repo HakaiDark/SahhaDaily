@@ -42,11 +42,24 @@ The catalog is **14 products** sourced from **WeightWorld UK** (`weightworld.uk`
 - **Server components by default.** Only `HeroMotion`, `Reveal`, `ProductFinder`, `ProductGallery`, and `ShopFilters` are `"use client"`.
 - `src/app/product/[slug]/page.tsx` is statically generated via `generateStaticParams()` over `products`. It joins the curated product with the scraped JSON by SKU, then `splitProductContent()` **heuristically** parses the raw `descriptionText` into accordion sections (a line is treated as a heading if it ends in `?` or starts with keywords like "Benefits"/"How"/"Directions"). Expect imperfect parsing on messy scraped text.
 - `ShopFilters` does **all filtering and sorting client-side** over the full `products` array (category, format, goal, search, best-sellers, sort). It reads initial `category`/`format`/`goal` from URL search params (`useSearchParams`), so links like `/shop?goal=beauty` deep-link into a filtered view — hence the page wraps it in `<Suspense>`.
-- `src/app/layout.tsx` holds the global chrome: scrolling bilingual urgency banner, header/footer, and the floating WhatsApp bubble. Fonts (Playfair Display + Cairo for Arabic) load via Google Fonts `<link>` here.
+- `src/app/layout.tsx` holds the global chrome: scrolling bilingual urgency banner, header/footer, the floating WhatsApp bubble, and the fixed `.atmosphere` decoration layer (first child of `<body>`). Fonts (Cairo + Tajawal) load via Google Fonts `<link>` here — note the codebase uses Cairo/Tajawal throughout, **not** the Playfair Display the brand board specifies.
 
 ### Styling
 
-Single global stylesheet `src/app/globals.css` driven by CSS variables (`--green`, `--ink`, `--muted`, `--accent`). No CSS modules or Tailwind. Motion via Framer Motion with reduced-motion support.
+Single global stylesheet `src/app/globals.css` driven by CSS variables (`--green`, `--deep-green`, `--sage`, `--beige`, `--ink`, `--muted`, `--accent`, etc. — see `:root`). No CSS modules or Tailwind. Motion via Framer Motion (`Reveal`, `HeroMotion`) plus a few CSS keyframes, all gated behind `prefers-reduced-motion`.
+
+Two-tone wordmark convention: the "Sahha"/"صحة" half is green (`--green`), the "Daily"/"دايلي" half is orange (`--accent`). This split is applied by wrapping the accent half in a `<span>` and is reused in the header/footer logo (`.brandLatin`/`.brandArabic`), the hero `.eyebrow`, and `.arabicTag .o`.
+
+### Botanical decoration layer
+
+`src/components/Botanical.tsx` (a server component) exports **file-free inline-SVG** nature ornaments: `Fern`, `Vine`, `Sprig`, `OliveBranch`, `Leaf`, `Cedar` (Lebanon cedar), `CedarRidge` (a treeline), and `BotanicalDivider`. They render zero client JS and ship no image files.
+
+- All shapes draw with `currentColor`, so **tint and opacity are controlled entirely from CSS** placement classes (`.heroFern`, `.heroCedar`, `.panelVine`, `.panelCedar`, `.footerRidge`, `.footerVine`, etc.) under the `/* BOTANICAL ATMOSPHERE LAYER */` block at the end of `globals.css`. To tune strength, change opacity/color there — don't touch the components.
+- Every decoration is `aria-hidden` + `pointer-events:none` and sits **behind** content (the `.atmosphere` grain/sunlight layer is fixed at `z-index:-1`; per-section accents use `z-index:0` with content lifted to `z-index:1`).
+- Gentle float motion comes from the `.botanicalFloat` class → `@keyframes botanicalDrift`, which animates the **independent `translate` property** (not `transform`) so each element's static `transform: rotate()/scaleX()` composes with the drift instead of being overwritten. Disabled under `prefers-reduced-motion`.
+- The `Cedar`/`CedarRidge`/divider all share one private `CedarGlyph` drawn in base-origin coords (base at `0,0`, growing up) so a single tree, a treeline, and the divider mark stay visually identical.
+
+As of the latest pass this layer is applied to the **homepage + global footer only**; the shop and product-detail pages have not yet received it.
 
 ## Context docs
 
