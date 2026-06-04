@@ -22,6 +22,9 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+/* Guard against decorative elements pushing the page wider than the
+   viewport — kills the mobile "zoom-out" / side-gutter problem. */
+html, body { max-width: 100%; overflow-x: hidden; overflow-x: clip; }
 body {
   margin: 0;
   background:
@@ -113,7 +116,7 @@ h1 em, h2 em, h3 em, .hl em { font-style: normal; color: var(--accent); }
   backdrop-filter: blur(16px);
 }
 .headerInner {
-  min-height: 70px;
+  min-height: 96px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -124,6 +127,12 @@ h1 em, h2 em, h3 em, .hl em { font-style: normal; color: var(--accent); }
   align-items: center;
   gap: 10px;
 }
+.brandLockup {
+  height: 80px;
+  width: auto;
+  display: block;
+}
+.footer .brandLockup { height: 84px; }
 .brandIcon {
   width: 54px;
   height: 54px;
@@ -414,6 +423,15 @@ h1 em, h2 em, h3 em, .hl em { font-style: normal; color: var(--accent); }
 .brandPanel > * { position: relative; z-index: 1; }
 .brandPanel h1, .brandPanel h2, .brandPanel h3 { color: #fff; }
 .brandPanel .hl { color: var(--sage); }
+.brandPanel p { color: rgba(255, 255, 255, 0.86); }
+.brandPanel p strong { color: #fff; font-weight: 800; }
+.brandPromise {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 1.05rem;
+}
+.brandPromise strong { color: var(--sage); }
 .principles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
 .principle { padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--line); background: rgba(255, 255, 255, 0.7); }
 
@@ -425,7 +443,9 @@ h1 em, h2 em, h3 em, .hl em { font-style: normal; color: var(--accent); }
   padding: 14px 0 40px;
   max-width: 680px;
   margin: 0 auto;
+  position: relative;
 }
+.shopHero > * { position: relative; z-index: 1; }
 .shopHero h1 em { font-style: normal; color: var(--accent); }
 .shopHeroAr {
   font-family: 'Cairo', sans-serif;
@@ -560,7 +580,11 @@ h1 em, h2 em, h3 em, .hl em { font-style: normal; color: var(--accent); }
 .productHero {
   padding: 48px 0 30px;
   background: linear-gradient(180deg, rgba(205, 230, 213, 0.24), rgba(255, 254, 250, 0));
+  position: relative;
+  overflow: clip;
+  isolation: isolate;
 }
+.productHero > .container { position: relative; z-index: 1; }
 .productHeroGrid {
   display: grid;
   grid-template-columns: minmax(300px, 0.86fr) minmax(0, 1.14fr);
@@ -956,6 +980,130 @@ h1 em, h2 em, h3 em, .hl em { font-style: normal; color: var(--accent); }
   to   { transform: translateX(-50%); }
 }
 
+/* ── Coming Soon / pre-launch banner ── */
+.comingSoon {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  background:
+    radial-gradient(120% 180% at 8% 0%, rgba(224, 122, 79, 0.35), transparent 55%),
+    linear-gradient(100deg, var(--deep-green) 0%, var(--green) 55%, #356a48 100%);
+  animation: csReveal 700ms cubic-bezier(.22,1,.36,1) both;
+}
+/* Light sweep that travels across the band. */
+.comingSoonShimmer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.22) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: csShimmer 5.5s ease-in-out infinite;
+}
+.comingSoonInner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px 22px;
+  padding: 11px 0;
+}
+.comingSoonBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.csDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 rgba(224, 122, 79, 0.7);
+  animation: csPulse 1.8s ease-out infinite;
+}
+.comingSoonCopy {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+.comingSoonCopy strong { font-size: 0.98rem; font-weight: 850; letter-spacing: 0.01em; }
+.comingSoonCopy span { font-size: 0.8rem; color: rgba(255, 255, 255, 0.82); }
+.comingSoonTeaser {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 240px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  padding: 7px 18px;
+  font-size: 0.84rem;
+  font-weight: 850;
+  letter-spacing: 0.01em;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.csTeaserText {
+  display: inline-block;
+  animation: csTeaser 480ms cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes csTeaser {
+  from { opacity: 0; transform: translateY(7px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.comingSoonCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  color: var(--deep-green);
+  font-weight: 850;
+  font-size: 0.84rem;
+  padding: 9px 18px;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: transform 200ms cubic-bezier(.22,1,.36,1), box-shadow 200ms ease;
+}
+.comingSoonCta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+}
+@keyframes csShimmer {
+  0% { transform: translateX(-100%); }
+  60%, 100% { transform: translateX(100%); }
+}
+@keyframes csPulse {
+  0% { box-shadow: 0 0 0 0 rgba(224, 122, 79, 0.7); }
+  70% { box-shadow: 0 0 0 9px rgba(224, 122, 79, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(224, 122, 79, 0); }
+}
+@keyframes csReveal {
+  from { opacity: 0; transform: translateY(-100%); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@media (max-width: 760px) {
+  .comingSoonCopy { display: none; }
+  .comingSoonInner { gap: 10px 14px; padding: 9px 0; }
+  .comingSoonTeaser { min-width: 0; font-size: 0.78rem; padding: 6px 14px; white-space: normal; text-align: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .comingSoon { animation: none; }
+  .comingSoonShimmer { display: none; }
+  .csDot { animation: none; }
+  .csTeaserText { animation: none; }
+}
+
 /* ── WhatsApp Bubble ── */
 .waBubble {
   position: fixed;
@@ -1016,8 +1164,10 @@ h1 em, h2 em, h3 em, .hl em { font-style: normal; color: var(--accent); }
   .desktopNav { display: none; }
   .mobileMenu { display: block; }
   .headerInner {
-    min-height: 64px;
+    min-height: 76px;
   }
+  .brandLockup { height: 62px; }
+  .footer .brandLockup { height: 70px; }
   .brandIcon {
     width: 38px;
     height: 38px;
@@ -1241,6 +1391,66 @@ h1 em, h2 em, h3 em, .hl em { font-style: normal; color: var(--accent); }
   color: var(--muted);
   white-space: nowrap;
 }
+
+/* Expert shortcuts under the "Not sure where to start?" copy. */
+.finderExperts {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.finderExpertsLabel {
+  display: block;
+  font-size: 0.74rem;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 12px;
+}
+.finderExperts ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.finderExperts a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 7px 16px 7px 7px;
+  transition: transform 200ms cubic-bezier(.22,1,.36,1), box-shadow 200ms ease, border-color 200ms ease;
+}
+.finderExperts a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(24, 35, 29, 0.1);
+  border-color: rgba(46, 91, 63, 0.28);
+}
+.finderExperts img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  flex: none;
+  border: 1px solid rgba(46, 91, 63, 0.12);
+}
+.finderExpertText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.finderExpertText strong {
+  color: var(--ink);
+  font-size: 0.92rem;
+  font-weight: 850;
+}
+.finderExpertText small {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
 .bundleGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1510,39 +1720,10 @@ h1 em, h2 em, h3 em, .hl em { font-style: normal; color: var(--accent); }
   color: var(--ink);
 }
 
-/* TBA pricing */
-.priceLine {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  margin: 4px 0 10px;
-}
-.priceLine strong,
-.productPriceBlock strong {
-  color: var(--green);
-  font-size: 1.18rem;
-  font-weight: 950;
-}
-.priceLine span,
-.productPriceBlock span {
-  color: var(--muted);
-  font-size: 0.76rem;
-  font-weight: 750;
-}
-.productPriceBlock {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  margin: 0 0 16px;
-}
-.productPriceBlock strong {
-  font-size: 1.65rem;
-}
-
-
 /* ════════════════════════════════════════════════════════════════
-   BOTANICAL ATMOSPHERE LAYER  (understated — homepage pass)
-   Lightweight CSS + inline-SVG nature accents that sit BEHIND content.
+   ATMOSPHERE LAYER
+   Lightweight CSS paper/linen texture + soft brand-tone lighting that
+   sits BEHIND all content. (No illustrated decorations.)
    ════════════════════════════════════════════════════════════════ */
 
 /* Paper / linen grain + soft sunlight, fixed behind everything (z:-1). */
@@ -1552,9 +1733,10 @@ h1 em, h2 em, h3 em, .hl em { font-style: normal; color: var(--accent); }
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(circle at 84% -6%, rgba(224, 122, 79, 0.07), transparent 42%),
-    radial-gradient(circle at 2% 10%, rgba(167, 196, 154, 0.10), transparent 40%),
-    radial-gradient(circle at 96% 88%, rgba(167, 196, 154, 0.08), transparent 38%);
+    radial-gradient(closest-side at 84% -4%, rgba(224, 122, 79, 0.08), transparent 60%),
+    radial-gradient(closest-side at 0% 14%, rgba(167, 196, 154, 0.12), transparent 60%),
+    radial-gradient(closest-side at 100% 84%, rgba(167, 196, 154, 0.10), transparent 60%),
+    radial-gradient(closest-side at 50% 108%, rgba(220, 204, 183, 0.12), transparent 60%);
 }
 .atmosphere::before {
   content: "";
@@ -1576,50 +1758,8 @@ h1 em, h2 em, h3 em, .hl em { font-style: normal; color: var(--accent); }
     repeating-linear-gradient(90deg, rgba(46, 91, 63, 0.022) 0 1px, transparent 1px 4px);
 }
 
-/* Base for every inline-SVG botanical accent. */
-.botanical {
-  position: absolute;
-  pointer-events: none;
-  z-index: 0;
-  color: var(--green);
-  display: block;
-}
-
-/* Gentle drift — animates the INDEPENDENT `translate` property so each
-   element's static `transform` (rotate / scaleX) composes with it cleanly. */
-@keyframes botanicalDrift {
-  0%, 100% { translate: 0 0; }
-  50% { translate: 0 -12px; }
-}
-.botanicalFloat { animation: botanicalDrift 22s ease-in-out infinite; }
-.botanicalFloat.slow { animation-duration: 30s; }
-.botanicalFloat.delay { animation-delay: -8s; }
-
-/* ── Hero botanicals + depth ── */
+/* ── Hero depth ── */
 .hero { isolation: isolate; }
-.heroFern {
-  bottom: -20px;
-  left: -30px;
-  width: 192px;
-  color: var(--green);
-  opacity: 0.22;
-  transform: rotate(8deg);
-}
-.heroCedar {
-  bottom: -14px;
-  right: -12px;
-  width: 176px;
-  color: var(--green);
-  opacity: 0.2;
-}
-.heroSprig {
-  top: 22px;
-  right: 12px;
-  width: 120px;
-  color: var(--sage);
-  opacity: 0.6;
-  transform: rotate(-6deg);
-}
 /* Organic glow shapes behind the hero copy. */
 .heroCopy { position: relative; z-index: 1; }
 .heroCopy::before {
@@ -1635,58 +1775,10 @@ h1 em, h2 em, h3 em, .hl em { font-style: normal; color: var(--accent); }
 }
 .hero h1 { letter-spacing: -0.022em; }
 
-/* ── Botanical section divider ── */
-.botanicalDivider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  color: var(--sage);
-  margin: 6px auto 0;
-  width: min(540px, 80%);
-}
-.botanicalDivider .bdLine {
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(46, 91, 63, 0.22), transparent);
-}
-.botanicalDivider .bdMark {
-  width: 34px;
-  height: 36px;
-  flex: none;
-  color: var(--green);
-  opacity: 0.8;
-}
-
 /* ── About / story panel ── */
 .brandPanel {
   border-radius: 26px 26px 26px 60px;
   padding: 40px 38px;
-}
-.panelVine {
-  top: 8px;
-  right: 12px;
-  height: 230px;
-  width: auto;
-  color: #ffffff;
-  opacity: 0.22;
-  z-index: 0;
-}
-.panelLeaf {
-  bottom: 18px;
-  left: 24px;
-  width: 58px;
-  color: #ffffff;
-  opacity: 0.16;
-  z-index: 0;
-}
-.panelCedar {
-  bottom: -6px;
-  right: 26px;
-  width: 96px;
-  color: #ffffff;
-  opacity: 0.18;
-  z-index: 0;
 }
 /* Clay accent shape — warm organic blob in the principles column. */
 .whyGrid { position: relative; }
@@ -1768,43 +1860,132 @@ h1 em, h2 em, h3 em, .hl em { font-style: normal; color: var(--accent); }
   box-shadow: 0 22px 44px rgba(24, 35, 29, 0.1);
 }
 
-/* ── Footer botanical framing ── */
+/* ── Our Experts ── */
+.expertGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+.expertCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  scroll-margin-top: 96px;
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  padding: 30px 26px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(205, 230, 213, 0.45), transparent 42%),
+    rgba(255, 255, 255, 0.82);
+  box-shadow: 0 1px 2px rgba(24, 35, 29, 0.04);
+  transition: transform 260ms cubic-bezier(.22,1,.36,1), box-shadow 260ms ease, border-color 260ms ease;
+}
+.expertCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 26px 52px rgba(24, 35, 29, 0.12);
+  border-color: rgba(46, 91, 63, 0.18);
+}
+.expertAvatar {
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 10px 24px rgba(24, 35, 29, 0.12);
+  margin-bottom: 16px;
+}
+.expertRegion {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  background: rgba(205, 230, 213, 0.5);
+  border-radius: 999px;
+  padding: 3px 12px;
+}
+.expertCard h3 {
+  margin: 0 0 4px;
+  font-size: 1.16rem;
+}
+.expertRole {
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.expertCard p {
+  color: var(--muted);
+  margin: 12px 0 18px;
+  font-size: 0.95rem;
+}
+.expertLink {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--green);
+  font-weight: 850;
+  transition: color 160ms ease;
+}
+.expertCard:hover .expertLink { color: var(--accent); }
+
+/* ── Footer ── */
 .footer {
   position: relative;
   overflow: hidden;
   background: linear-gradient(180deg, transparent, rgba(220, 232, 210, 0.22));
 }
 .footerGrid { position: relative; z-index: 1; }
-.footerVine {
-  top: -10px;
-  right: -6px;
-  height: 230px;
-  width: auto;
-  color: var(--green);
-  opacity: 0.14;
-  transform: scaleX(-1);
+.footerColTitle {
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 10px;
+  font-size: 1.05rem;
 }
-.footerRidge {
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: auto;
-  color: var(--green);
-  opacity: 0.15;
+.footerContactLead {
+  margin: 0 0 16px;
+  max-width: 320px;
+  color: var(--muted);
 }
+.footerWaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--green);
+  color: #fff;
+  font-weight: 850;
+  padding: 12px 20px;
+  border-radius: 999px;
+  box-shadow: 0 12px 28px rgba(46, 91, 63, 0.24);
+  transition: transform 200ms cubic-bezier(.22,1,.36,1), box-shadow 200ms ease, background 200ms ease;
+}
+.footerWaBtn:hover {
+  transform: translateY(-2px);
+  background: var(--deep-green);
+  box-shadow: 0 16px 34px rgba(46, 91, 63, 0.3);
+}
+.footerContactList {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+.footerContactList li,
+.footerContactList a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+}
+.footerContactList svg { color: var(--green); flex: none; }
+.footerContactList a:hover { color: var(--green); }
+.footerHours { font-size: 0.92rem; }
 
 @media (max-width: 760px) {
-  .heroFern { width: 132px; bottom: -10px; left: -26px; }
-  .heroCedar { width: 120px; bottom: -8px; right: -14px; }
-  .heroSprig { display: none; }
-  .panelCedar { width: 76px; }
   .brandPanel { border-radius: 24px 24px 24px 44px; padding: 30px 24px; }
-  .footerRidge { opacity: 0.12; }
-  .footerVine { height: 170px; opacity: 0.1; }
-  .botanicalDivider { width: min(440px, 86%); gap: 12px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .botanicalFloat { animation: none !important; }
+  .expertGrid { grid-template-columns: 1fr; gap: 16px; }
 }
