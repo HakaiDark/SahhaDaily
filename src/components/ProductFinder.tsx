@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { products } from "@/data/products";
 import { wellnessGoals } from "@/data/merchandising";
+import { experts } from "@/data/experts";
 
 const formatOptions = ["Any format", "Capsules", "Tablets", "Softgels", "Gummies"];
 
@@ -32,6 +33,24 @@ export function ProductFinder() {
           <p className="lead">
             Choose A Wellness Priority And We Will Narrow The Catalog Into A Simple Routine.
           </p>
+
+          <div className="finderExperts">
+            <span className="finderExpertsLabel">Talk To One Of Our Experts</span>
+            <ul>
+              {experts.map((expert) => (
+                <li key={expert.id}>
+                  <Link href={`/#expert-${expert.id}`}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={expert.avatar} alt={expert.name} width={44} height={44} loading="lazy" />
+                    <span className="finderExpertText">
+                      <strong>{expert.name}</strong>
+                      <small>{expert.flag} {expert.region} · {expert.role}</small>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         <div className="finderCard">

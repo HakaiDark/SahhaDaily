@@ -4,8 +4,9 @@ import { ProductFinder } from "@/components/ProductFinder";
 import { ProductCard } from "@/components/ProductCard";
 import { Reveal } from "@/components/Reveal";
 import { RoutineBundles } from "@/components/RoutineBundles";
-import { Fern, Cedar, Leaf, Vine, BotanicalDivider } from "@/components/Botanical";
 import { categories, products } from "@/data/products";
+import { experts } from "@/data/experts";
+import { waLink } from "@/data/contact";
 
 const categorySections = categories
   .map((category) => ({
@@ -18,8 +19,6 @@ export default function HomePage() {
   return (
     <main>
       <section className="hero">
-        <Fern className="botanical heroFern botanicalFloat slow" />
-        <Cedar className="botanical heroCedar botanicalFloat delay" />
         <div className="container heroGrid">
           <Reveal className="heroCopy">
             <span className="eyebrow"><span className="g">Sahha</span>Daily · <span className="g">صحة</span> دايلي</span>
@@ -49,8 +48,6 @@ export default function HomePage() {
       <ProductFinder />
 
       <RoutineBundles />
-
-      <div className="container"><BotanicalDivider /></div>
 
       <section className="section" id="categories">
         <div className="container">
@@ -94,36 +91,66 @@ export default function HomePage() {
         </section>
       ))}
 
-      <div className="container"><BotanicalDivider /></div>
+      <section className="section" id="experts">
+        <div className="container">
+          <Reveal className="sectionHead">
+            <div>
+              <span className="eyebrow">Our Expert Panel</span>
+              <h2>Chosen, Not Just <span className="hl">Stocked</span></h2>
+            </div>
+            <p className="lead">
+              Every product we carry is reviewed by an independent panel of specialists across Europe and Lebanon — keeping our range safe, effective, and genuinely useful.
+            </p>
+          </Reveal>
+          <div className="expertGrid">
+            {experts.map((expert, index) => (
+              <Reveal key={expert.id} delay={index * 0.05} className="expertCard" id={`expert-${expert.id}`}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="expertAvatar" src={expert.avatar} alt={expert.name} width={96} height={96} loading="lazy" />
+                <span className="expertRegion">{expert.flag} {expert.region}</span>
+                <h3>{expert.name}</h3>
+                <span className="expertRole">{expert.role}</span>
+                <p>{expert.bio}</p>
+                <a {...waLink(`Hi SahhaDaily! 🌿 I'd like a wellness consultation with ${expert.name}.`)} className="expertLink">
+                  Chat On WhatsApp →
+                </a>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="section" id="about">
         <div className="container whyGrid">
           <Reveal className="brandPanel">
-            <Vine className="botanical panelVine botanicalFloat slow" />
-            <Leaf className="botanical panelLeaf" />
-            <Cedar className="botanical panelCedar botanicalFloat delay" />
             <span className="eyebrow" style={{ color: "#f1b094" }}>About SahhaDaily</span>
-            <h2>Simple Product Discovery With Clear <span className="hl">Supplement Information</span>.</h2>
+            <h2>European Quality, <span className="hl">Lebanese Heart</span>.</h2>
             <p>
-              Every product page is structured to help customers understand what a supplement supports and how to use it in a daily routine.
+              We operate between Germany and Lebanon. From Germany, <strong>Sohaib</strong> handles sourcing and quality, working directly with established European supplement manufacturers. In Lebanon, <strong>Mohamed</strong> leads our local operations, making sure the right products reach the families who need them.
+            </p>
+            <p>
+              That bridge — European quality with real, on-the-ground Lebanese knowledge — is the heart of what we do.
+            </p>
+            <p className="brandPromise">
+              Our promise is in our name. <strong>Sahha</strong> means health — and our mission is to support yours, every single day.
             </p>
           </Reveal>
           <div className="principles">
             <Reveal className="principle">
-              <h3>Clear Structure</h3>
-              <p>Categories, cards, and product pages are organized for quick scanning.</p>
+              <h3>🇩🇪 Sourced In Europe</h3>
+              <p>Sohaib works hand-in-hand with established European manufacturers on sourcing and quality.</p>
             </Reveal>
             <Reveal className="principle" delay={0.05}>
-              <h3>Consistent Details</h3>
-              <p>Every product includes description, benefits, ingredients, and usage guidance.</p>
+              <h3>🇱🇧 Delivered In Lebanon</h3>
+              <p>Mohamed leads local operations, getting the right products to the families who need them.</p>
             </Reveal>
             <Reveal className="principle" delay={0.1}>
-              <h3>Safe Wording</h3>
-              <p>Copy uses supportive wellness language and avoids cure-style claims.</p>
+              <h3>🔬 Chosen, Not Stocked</h3>
+              <p>An independent panel of experts across Europe and Lebanon reviews our range so it stays safe and useful.</p>
             </Reveal>
             <Reveal className="principle" delay={0.15}>
-              <h3>Fast And Responsive</h3>
-              <p>Lean components and responsive grids keep the site smooth and clean.</p>
+              <h3>📦 Reliable Logistics</h3>
+              <p>Dr. Kamal Mohyeldine keeps our supply chain running smoothly — from Europe all the way to your door.</p>
             </Reveal>
           </div>
         </div>

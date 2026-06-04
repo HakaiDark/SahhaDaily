@@ -1,1 +1,11 @@
-{"version":4,"routes":{"/product/pure-marine-collagen-1200mg-120-capsules":{},"/product/ashwagandha-ksm-66-1500mg-180-tablets":{},"/product/magnesium-glycinate-1420mg-180-capsules":{},"/product/omega-3-fish-oil-2000mg-240-softgels":{},"/product/multivitamins-with-minerals-400-tablets":{},"/product/vitamin-d3-k2-mk7-240-tablets":{},"/product/calcium-magnesium-zinc-vitamin-d3-400-tablets":{},"/product/biotin-12000mcg-365-tablets":{},"/product/multivitamin-gummies-for-women-90-gummies":{},"/product/iron-vitamin-c-gummies-for-kids-120-gummies":{},"/product/vitamin-c-and-zinc-1000mg-180-tablets":{},"/product/berberine-500mg-120-capsules":{},"/product/glucosamine-and-chondroitin-180-capsules":{},"/product/vitamin-b-complex-365-tablets":{}},"dynamicRoutes":{"/product/[slug]":{"dataRoute":null,"dataRouteRegex":null,"fallback":null,"fallbackRevalidate":false,"fallbackSourceRoute":"/product/[slug]","routeRegex":"^\\/product\\/([^/]+?)(?:\\/)?$","allowHeader":[]}},"notFoundRoutes":[],"preview":{"previewModeId":"678623339b70590a326c46867f36719c","previewModeSigningKey":"88a12e91387b08ae40d85f2aa012ee5390b63f9cf2e848e62ea3106ccf04baaa","previewModeEncryptionKey":"34e25c242d5d7e2946f0d3d266dcb1a23c100a6546bd69bd555fd90aee9b259a"}}
+{
+  "version": 4,
+  "routes": {},
+  "dynamicRoutes": {},
+  "notFoundRoutes": [],
+  "preview": {
+    "previewModeId": "3f190469f2d10d0be1152d0218ecd1f1",
+    "previewModeSigningKey": "e21ebe1e0c19d55c88b64a7736d4f13c20ce470cc38ac0ddafd1d600ac38e29c",
+    "previewModeEncryptionKey": "57a17e33c7cebbca86e2fc7425b1f72905c0759f9b7f8ff7fd717ae6cc28a938"
+  }
+}

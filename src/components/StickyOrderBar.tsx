@@ -1,15 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { waLink } from "@/data/contact";
 
 export function StickyOrderBar({
   name,
-  price,
-  href
+  message
 }: {
   name: string;
-  price: string;
-  href: string;
+  message: string;
 }) {
   const sentinelRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -35,8 +34,8 @@ export function StickyOrderBar({
       <div ref={sentinelRef} aria-hidden="true" />
       <div className={`productStickyOrder ${visible ? "isVisible" : ""}`} aria-label="Quick order bar">
         <div className="container stickyOrderInner">
-          <span>{name} · {price}</span>
-          <a href={href} target="_blank" rel="noopener noreferrer" className="btn btnPrimary">
+          <span>{name}</span>
+          <a {...waLink(message)} className="btn btnPrimary">
             Order On WhatsApp
           </a>
         </div>
