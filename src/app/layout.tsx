@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { Vine, CedarRidge } from "@/components/Botanical";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -94,6 +95,8 @@ function Header() {
 function Footer() {
   return (
     <footer className="footer" id="contact">
+      <CedarRidge className="botanical footerRidge" />
+      <Vine className="botanical footerVine botanicalFloat slow" />
       <div className="container footerGrid">
         <div>
           <Link href="/" className="brandMark" aria-label="SahhaDaily home">
@@ -148,6 +151,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
       </head>
       <body>
+        <div className="atmosphere" aria-hidden="true" />
         <UrgencyBanner />
         <Header />
         {children}

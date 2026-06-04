@@ -1538,3 +1538,273 @@ h1 em, h2 em, h3 em, .hl em { font-style: normal; color: var(--accent); }
 .productPriceBlock strong {
   font-size: 1.65rem;
 }
+
+
+/* ════════════════════════════════════════════════════════════════
+   BOTANICAL ATMOSPHERE LAYER  (understated — homepage pass)
+   Lightweight CSS + inline-SVG nature accents that sit BEHIND content.
+   ════════════════════════════════════════════════════════════════ */
+
+/* Paper / linen grain + soft sunlight, fixed behind everything (z:-1). */
+.atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 84% -6%, rgba(224, 122, 79, 0.07), transparent 42%),
+    radial-gradient(circle at 2% 10%, rgba(167, 196, 154, 0.10), transparent 40%),
+    radial-gradient(circle at 96% 88%, rgba(167, 196, 154, 0.08), transparent 38%);
+}
+.atmosphere::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Fractal-noise paper grain, generated inline (no image file). */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+}
+/* Faint woven linen cross-hatch, very subtle. */
+.atmosphere::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(46, 91, 63, 0.022) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(90deg, rgba(46, 91, 63, 0.022) 0 1px, transparent 1px 4px);
+}
+
+/* Base for every inline-SVG botanical accent. */
+.botanical {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  color: var(--green);
+  display: block;
+}
+
+/* Gentle drift — animates the INDEPENDENT `translate` property so each
+   element's static `transform` (rotate / scaleX) composes with it cleanly. */
+@keyframes botanicalDrift {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -12px; }
+}
+.botanicalFloat { animation: botanicalDrift 22s ease-in-out infinite; }
+.botanicalFloat.slow { animation-duration: 30s; }
+.botanicalFloat.delay { animation-delay: -8s; }
+
+/* ── Hero botanicals + depth ── */
+.hero { isolation: isolate; }
+.heroFern {
+  bottom: -20px;
+  left: -30px;
+  width: 192px;
+  color: var(--green);
+  opacity: 0.22;
+  transform: rotate(8deg);
+}
+.heroCedar {
+  bottom: -14px;
+  right: -12px;
+  width: 176px;
+  color: var(--green);
+  opacity: 0.2;
+}
+.heroSprig {
+  top: 22px;
+  right: 12px;
+  width: 120px;
+  color: var(--sage);
+  opacity: 0.6;
+  transform: rotate(-6deg);
+}
+/* Organic glow shapes behind the hero copy. */
+.heroCopy { position: relative; z-index: 1; }
+.heroCopy::before {
+  content: "";
+  position: absolute;
+  inset: -40px -60px -30px -70px;
+  z-index: -1;
+  background:
+    radial-gradient(60% 70% at 20% 30%, rgba(255, 255, 255, 0.55), transparent 70%),
+    radial-gradient(50% 60% at 70% 80%, rgba(220, 232, 210, 0.4), transparent 72%);
+  filter: blur(8px);
+  border-radius: 48% 52% 60% 40% / 50% 44% 56% 50%;
+}
+.hero h1 { letter-spacing: -0.022em; }
+
+/* ── Botanical section divider ── */
+.botanicalDivider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  color: var(--sage);
+  margin: 6px auto 0;
+  width: min(540px, 80%);
+}
+.botanicalDivider .bdLine {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(46, 91, 63, 0.22), transparent);
+}
+.botanicalDivider .bdMark {
+  width: 34px;
+  height: 36px;
+  flex: none;
+  color: var(--green);
+  opacity: 0.8;
+}
+
+/* ── About / story panel ── */
+.brandPanel {
+  border-radius: 26px 26px 26px 60px;
+  padding: 40px 38px;
+}
+.panelVine {
+  top: 8px;
+  right: 12px;
+  height: 230px;
+  width: auto;
+  color: #ffffff;
+  opacity: 0.22;
+  z-index: 0;
+}
+.panelLeaf {
+  bottom: 18px;
+  left: 24px;
+  width: 58px;
+  color: #ffffff;
+  opacity: 0.16;
+  z-index: 0;
+}
+.panelCedar {
+  bottom: -6px;
+  right: 26px;
+  width: 96px;
+  color: #ffffff;
+  opacity: 0.18;
+  z-index: 0;
+}
+/* Clay accent shape — warm organic blob in the principles column. */
+.whyGrid { position: relative; }
+.whyGrid::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 320px;
+  height: 320px;
+  right: -60px;
+  bottom: -70px;
+  background: radial-gradient(circle, rgba(224, 122, 79, 0.10), transparent 70%);
+  border-radius: 46% 54% 62% 38% / 55% 42% 58% 45%;
+  pointer-events: none;
+}
+.principle {
+  background: rgba(255, 255, 255, 0.78);
+  transition: transform 240ms cubic-bezier(.22,1,.36,1), box-shadow 240ms ease, border-color 240ms ease;
+}
+.principle:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(24, 35, 29, 0.08);
+  border-color: rgba(46, 91, 63, 0.2);
+}
+
+/* ── Refined "luxury" product cards ── */
+.productCard {
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.88);
+  border-color: rgba(46, 91, 63, 0.1);
+  box-shadow: 0 1px 2px rgba(24, 35, 29, 0.04);
+  transition: transform 280ms cubic-bezier(.22,1,.36,1), box-shadow 280ms ease, border-color 280ms ease;
+}
+.productCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 26px 52px rgba(24, 35, 29, 0.12);
+  border-color: rgba(46, 91, 63, 0.18);
+}
+.productImage {
+  padding: 22px;
+  background:
+    radial-gradient(circle at 50% 70%, rgba(37, 91, 63, 0.14), transparent 38%),
+    radial-gradient(circle at 16% 14%, rgba(167, 196, 154, 0.30), transparent 30%),
+    linear-gradient(150deg, rgba(247, 246, 242, 0.6), rgba(221, 204, 183, 0.22));
+}
+.productCard:hover .productImage img { transform: scale(1.05); }
+.productBody { padding: 20px 20px 22px; gap: 2px; }
+.productBody h3 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.28;
+  margin-bottom: 8px;
+}
+.badge {
+  background: rgba(205, 230, 213, 0.45);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+}
+.productFooter {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(46, 91, 63, 0.1);
+}
+.smallLink {
+  transition: color 160ms ease, transform 160ms ease;
+  display: inline-block;
+}
+.productCard:hover .smallLink { color: var(--accent); }
+
+/* Category cards — softer, more premium. */
+.categoryCard {
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.82);
+  transition: transform 240ms cubic-bezier(.22,1,.36,1), box-shadow 240ms ease, border-color 240ms ease;
+}
+.categoryCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 22px 44px rgba(24, 35, 29, 0.1);
+}
+
+/* ── Footer botanical framing ── */
+.footer {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, transparent, rgba(220, 232, 210, 0.22));
+}
+.footerGrid { position: relative; z-index: 1; }
+.footerVine {
+  top: -10px;
+  right: -6px;
+  height: 230px;
+  width: auto;
+  color: var(--green);
+  opacity: 0.14;
+  transform: scaleX(-1);
+}
+.footerRidge {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: auto;
+  color: var(--green);
+  opacity: 0.15;
+}
+
+@media (max-width: 760px) {
+  .heroFern { width: 132px; bottom: -10px; left: -26px; }
+  .heroCedar { width: 120px; bottom: -8px; right: -14px; }
+  .heroSprig { display: none; }
+  .panelCedar { width: 76px; }
+  .brandPanel { border-radius: 24px 24px 24px 44px; padding: 30px 24px; }
+  .footerRidge { opacity: 0.12; }
+  .footerVine { height: 170px; opacity: 0.1; }
+  .botanicalDivider { width: min(440px, 86%); gap: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .botanicalFloat { animation: none !important; }
+}
