@@ -6,6 +6,7 @@ import { ProductGallery } from "@/components/ProductGallery";
 import { StickyOrderBar } from "@/components/StickyOrderBar";
 import { getProductBySlug, getRelatedProducts, products } from "@/data/products";
 import { getGoalsForSku } from "@/data/merchandising";
+import { waLink } from "@/data/contact";
 import scrapedProducts from "@/data/weightworld-scraped-launch-products.json";
 
 type ProductPageProps = {
@@ -74,8 +75,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const scrapedGallery = scrapedProduct as ScrapedProductGallery | undefined;
   const galleryImages = scrapedGallery?.localImages?.length ? scrapedGallery.localImages : [product.image];
   const productGoals = getGoalsForSku(product.sku);
-  const displayPrice = product.price === "TBA" ? "Price On Request" : product.price;
-  const orderText = encodeURIComponent([
+  const orderMessage = [
     "Hi SahhaDaily! 🌿",
     "I'd like to order:",
     "• " + product.name,
@@ -85,8 +85,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     "Name: ",
     "City: ",
     "Address: "
-  ].join("\n"));
-  const whatsappHref = "https://wa.me/96170000000?text=" + orderText;
+  ].join("\n");
 
   return (
     <main>
@@ -112,7 +111,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </span>
               <span className="ratingCount">{product.rating} · {product.reviewCount} verified reviews</span>
             </div>
-            <div className="productPriceBlock"><strong>{displayPrice}</strong><span>Reserve your bottle on WhatsApp</span></div>
             <p className="lead">{product.description}</p>
 
             <ul className="checkList detailBenefits" aria-label="Key benefits">
@@ -124,14 +122,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div className="purchasePanel">
               <div>
                 <span>Ready To Order?</span>
-                <strong>{displayPrice} · Reserve Via WhatsApp</strong>
+                <strong>Reserve Yours Via WhatsApp</strong>
               </div>
-              <a
-                href={whatsappHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btnPrimary"
-              >
+              <a {...waLink(orderMessage)} className="btn btnPrimary">
                 Order On WhatsApp
               </a>
             </div>
@@ -145,7 +138,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
       </section>
 
-      <StickyOrderBar name={product.name} price={displayPrice} href={whatsappHref} />
+      <StickyOrderBar name={product.name} message={orderMessage} />
 
       <section className="section" style={{ paddingTop: 36 }}>
         <div className="container productDetailsShell">
@@ -155,7 +148,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <dl>
                 <div><dt>Format</dt><dd>{product.format}</dd></div>
                 <div><dt>Rating</dt><dd>{product.rating} / 5</dd></div>
-                <div><dt>Price</dt><dd>{displayPrice}</dd></div>
                 <div><dt>Routine Fit</dt><dd>{productGoals.map((goal) => goal.shortLabel).join(", ") || product.category}</dd></div>
               </dl>
             </div>

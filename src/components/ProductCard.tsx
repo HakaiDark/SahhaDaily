@@ -24,7 +24,6 @@ function Stars({ rating }: { rating: number }) {
 
 export function ProductCard({ product }: { product: Product }) {
   const label = product.label ? LABEL_MAP[product.label] : null;
-  const displayPrice = product.price === "TBA" ? "Price On Request" : product.price;
 
   return (
     <article className="productCard">
@@ -48,9 +47,6 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="ratingRow">
           <Stars rating={product.rating} />
           <span className="ratingCount">({product.reviewCount})</span>
-        </div>
-        <div className="priceLine">
-          <strong>{displayPrice}</strong>
         </div>
         <div className="productFooter">
           <span className="sku">{product.sku}</span>

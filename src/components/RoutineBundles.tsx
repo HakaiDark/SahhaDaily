@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { products } from "@/data/products";
 import { routineBundles } from "@/data/merchandising";
+import { waLink } from "@/data/contact";
 
 function getBundleProducts(skus: string[]) {
   return skus
@@ -23,9 +24,8 @@ export function RoutineBundles() {
         <div className="bundleGrid">
           {routineBundles.map((bundle) => {
             const bundleProducts = getBundleProducts(bundle.skus);
-            const whatsappText = encodeURIComponent(
-              `Hi SahhaDaily! 🌿\nI want the ${bundle.title}:\n${bundleProducts.map((product) => `• ${product?.name} (${product?.sku})`).join("\n")}\n\nName:\nCity:\nAddress:`
-            );
+            const bundleMessage =
+              `Hi SahhaDaily! 🌿\nI want the ${bundle.title}:\n${bundleProducts.map((product) => `• ${product?.name} (${product?.sku})`).join("\n")}\n\nName:\nCity:\nAddress:`;
 
             return (
               <article className="bundleCard" key={bundle.id}>
@@ -40,12 +40,7 @@ export function RoutineBundles() {
                     </Link>
                   ))}
                 </div>
-                <a
-                  className="btn btnSecondary"
-                  href={`https://wa.me/96170000000?text=${whatsappText}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a className="btn btnSecondary" {...waLink(bundleMessage)}>
                   Ask For This Stack
                 </a>
               </article>
