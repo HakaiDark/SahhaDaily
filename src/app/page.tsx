@@ -20,7 +20,7 @@ export default function HomePage() {
     <main>
       <section className="hero">
         <div className="container heroGrid">
-          <Reveal className="heroCopy">
+          <div className="heroCopy heroEnter">
             <span className="eyebrow"><span className="g">Sahha</span>Daily · <span className="g">صحة</span> دايلي</span>
             <h1>Premium Wellness <span className="hl">Supplements</span></h1>
             <p className="arabicTag">صحتك بالديني <em>— <span className="o">Daily</span> Support, Better You.</em></p>
@@ -31,7 +31,7 @@ export default function HomePage() {
               <Link href="/shop" className="btn btnPrimary">Shop Products</Link>
               <Link href="#categories" className="btn btnSecondary">Explore Categories</Link>
             </div>
-          </Reveal>
+          </div>
           <HeroMotion />
         </div>
       </section>
@@ -83,8 +83,10 @@ export default function HomePage() {
               <Link href={`/shop?category=${encodeURIComponent(category)}`} className="btn btnSecondary">View All</Link>
             </div>
             <div className="productGrid">
-              {items.slice(0, 4).map((product) => (
-                <ProductCard key={product.id} product={product} />
+              {items.slice(0, 4).map((product, idx) => (
+                <Reveal key={product.id} delay={idx * 0.06}>
+                  <ProductCard product={product} />
+                </Reveal>
               ))}
             </div>
           </div>
