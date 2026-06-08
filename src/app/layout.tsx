@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { ComingSoon } from "@/components/ComingSoon";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { ParticleField } from "@/components/Botanical";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -21,7 +20,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en">
       <body>
         <div className="grain" aria-hidden="true" />
-        <ParticleField />
         <ComingSoon />
         <SiteHeader />
         {children}
