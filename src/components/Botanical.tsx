@@ -1,10 +1,10 @@
 "use client";
 
-/* Nature system — gradient botanicals + live particle field.
+/* Nature system — gradient botanicals.
    Ported from the editorial mockup. All decorative, aria-hidden, behind content.
    Each SVG uses useId() so its <defs> gradient ids stay unique & SSR-safe. */
 
-import { useEffect, useId, useRef } from "react";
+import { useId } from "react";
 
 type SvgProps = React.SVGProps<SVGSVGElement>;
 
@@ -112,124 +112,4 @@ export function Olive(props: SvgProps) {
       <circle cx="172" cy="70" r="6" fill="#5C7A3E" />
     </svg>
   );
-}
-
-/* ---------- Live particle field (leaf motes drifting on wind) ---------- */
-export function ParticleField({ density = 46 }: { density?: number }) {
-  const ref = useRef<HTMLCanvasElement | null>(null);
-  useEffect(() => {
-    const canvas = ref.current;
-    if (!canvas) return;
-    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) return;
-    const coarse = window.matchMedia && window.matchMedia("(hover: none), (pointer: coarse)").matches;
-    const baseDensity = coarse ? Math.min(density, 16) : density;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    let w = 0,
-      h = 0;
-    const dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.25 : 1.75);
-    let raf = 0;
-    let parts: {
-      x: number; y: number; len: number; sp: number; ph: number; amp: number; o: number; rot: number; spin: number; col: number[];
-    }[] = [];
-    let t0 = performance.now();
-    const resize = () => {
-      w = canvas.clientWidth;
-      h = canvas.clientHeight;
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-    const LEAF_COLORS = [
-      [126, 168, 106],
-      [78, 126, 74],
-      [62, 107, 71],
-      [167, 196, 154],
-    ];
-    const make = () => {
-      parts = [];
-      const n = Math.round(baseDensity * Math.min(1.3, w / 900));
-      for (let i = 0; i < n; i++) {
-        const c = LEAF_COLORS[(Math.random() * LEAF_COLORS.length) | 0];
-        parts.push({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          len: 5 + Math.random() * 7,
-          sp: 0.12 + Math.random() * 0.42,
-          ph: Math.random() * 6.28,
-          amp: 10 + Math.random() * 28,
-          o: 0.3 + Math.random() * 0.45,
-          rot: Math.random() * 6.28,
-          spin: (Math.random() - 0.5) * 0.5,
-          col: c,
-        });
-      }
-    };
-    const leafPath = (c: CanvasRenderingContext2D, L: number) => {
-      const W = L * 0.52;
-      c.beginPath();
-      c.moveTo(0, -L);
-      c.quadraticCurveTo(W, -L * 0.15, 0, L);
-      c.quadraticCurveTo(-W, -L * 0.15, 0, -L);
-      c.closePath();
-    };
-    resize();
-    make();
-    const draw = (now: number) => {
-      const t = (now - t0) / 1000;
-      ctx.clearRect(0, 0, w, h);
-      for (const p of parts) {
-        p.y -= p.sp;
-        const x = p.x + Math.sin(t * 0.5 + p.ph) * p.amp;
-        if (p.y < -14) {
-          p.y = h + 14;
-          p.x = Math.random() * w;
-        }
-        const ang = p.rot + t * p.spin + Math.sin(t * 0.6 + p.ph) * 0.5;
-        ctx.save();
-        ctx.translate(x, p.y);
-        ctx.rotate(ang);
-        const [r, g, bl] = p.col;
-        leafPath(ctx, p.len);
-        ctx.fillStyle = `rgba(${r},${g},${bl},${p.o})`;
-        ctx.fill();
-        ctx.beginPath();
-        ctx.moveTo(0, -p.len);
-        ctx.lineTo(0, p.len);
-        ctx.strokeStyle = `rgba(30,66,48,${p.o * 0.5})`;
-        ctx.lineWidth = 0.6;
-        ctx.stroke();
-        ctx.restore();
-      }
-      raf = requestAnimationFrame(draw);
-    };
-    raf = requestAnimationFrame(draw);
-    let resizeT: ReturnType<typeof setTimeout>;
-    const onR = () => {
-      clearTimeout(resizeT);
-      resizeT = setTimeout(() => {
-        resize();
-        make();
-      }, 150);
-    };
-    const onVis = () => {
-      if (!document.hidden && !raf) {
-        t0 = performance.now();
-        raf = requestAnimationFrame(draw);
-      } else if (document.hidden && raf) {
-        cancelAnimationFrame(raf);
-        raf = 0;
-      }
-    };
-    window.addEventListener("resize", onR, { passive: true });
-    document.addEventListener("visibilitychange", onVis);
-    return () => {
-      cancelAnimationFrame(raf);
-      clearTimeout(resizeT);
-      window.removeEventListener("resize", onR);
-      document.removeEventListener("visibilitychange", onVis);
-    };
-  }, [density]);
-  return <canvas ref={ref} className="particles" aria-hidden="true" />;
 }
