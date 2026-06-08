@@ -6,23 +6,29 @@ import type { ReactNode } from "react";
 type RevealProps = {
   children: ReactNode;
   delay?: number;
+  y?: number;
   className?: string;
-  id?: string;
+  as?: "div" | "section" | "li" | "article" | "span";
 };
 
-export function Reveal({ children, delay = 0, className, id }: RevealProps) {
-  const reduceMotion = useReducedMotion();
-
+/** Lightweight scroll reveal. Animates from hidden to visible once in view.
+ *  Reduced-motion users get the content immediately (no transform). */
+export function Reveal({ children, delay = 0, y = 36, className, as = "div" }: RevealProps) {
+  const reduce = useReducedMotion();
+  const MotionTag = motion[as] as typeof motion.div;
+  if (reduce) {
+    const Tag = as as "div";
+    return <Tag className={className}>{children}</Tag>;
+  }
   return (
-    <motion.div
-      id={id}
+    <MotionTag
       className={className}
-      initial={reduceMotion ? false : { opacity: 0, y: 22 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay }}
+      initial={{ opacity: 0, y, filter: "blur(6px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "0px 0px -8% 0px" }}
+      transition={{ duration: 0.8, delay, ease: [0.2, 0.8, 0.2, 1] }}
     >
       {children}
-    </motion.div>
+    </MotionTag>
   );
 }

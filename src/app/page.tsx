@@ -1,162 +1,129 @@
 import Link from "next/link";
-import { HeroMotion } from "@/components/HeroMotion";
-import { ProductFinder } from "@/components/ProductFinder";
+import { products, categories } from "@/data/products";
+import { Hero } from "@/components/Hero";
+import { ExpertsSection } from "@/components/ExpertsSection";
 import { ProductCard } from "@/components/ProductCard";
 import { Reveal } from "@/components/Reveal";
-import { RoutineBundles } from "@/components/RoutineBundles";
-import { categories, products } from "@/data/products";
-import { experts } from "@/data/experts";
-import { waLink } from "@/data/contact";
+import { ArrowIcon } from "@/components/icons";
 
-const categorySections = categories
-  .map((category) => ({
-    category,
-    items: products.filter((product) => product.category === category)
-  }))
-  .filter((section) => section.items.length > 0);
+const marqueeItems = [
+  "🌿 100% verified originals · بضاعة أصلية مضمونة",
+  "🇬🇧 Directly sourced from Europe · من أوروبا",
+  "🚚 Delivered to your door · توصيل لحد عندك",
+  "💬 Order on WhatsApp · اطلب على واتساب",
+];
+
+function Marquee() {
+  const set = [...marqueeItems, ...marqueeItems];
+  return (
+    <div className="marquee">
+      <div className="marquee-track">
+        {set.map((m, i) => (
+          <span className="marquee-item" key={i}>{m}<span className="dot" /></span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Featured() {
+  const picked = products.filter((p) => p.featured || p.label === "bestSeller" || p.label === "popular").slice(0, 8);
+  const list = picked.length >= 8 ? picked : products.slice(0, 8);
+  return (
+    <section className="sec" id="featured">
+      <div className="wrap-wide">
+        <Reveal className="intro">
+          <span className="kicker">Bestsellers</span>
+          <h2 className="h-lg">The everyday <span className="accent it">essentials</span></h2>
+          <p className="lead">The formulas our customers reach for most.</p>
+        </Reveal>
+        <div className="pgrid">
+          {list.map((p, i) => (
+            <Reveal key={p.id} delay={(i % 4) * 0.05}><ProductCard product={p} /></Reveal>
+          ))}
+        </div>
+        <div style={{ textAlign: "center", marginTop: "clamp(36px,4vw,56px)" }}>
+          <Link className="btn ghost" href="/shop"><span>View all products<ArrowIcon width={17} height={17} /></span></Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Categories() {
+  const rows = categories
+    .map((cat) => ({ cat, items: products.filter((p) => p.category === cat) }))
+    .filter((s) => s.items.length);
+  return (
+    <section className="sec" id="categories">
+      <div className="wrap-wide">
+        <Reveal className="intro">
+          <span className="kicker">Shop by category</span>
+          <h2 className="h-lg">Find your <span className="accent it">priority</span></h2>
+          <p className="lead">Browse the range by what matters most to you.</p>
+        </Reveal>
+        <div className="catg-grid">
+          {rows.map((r) => (
+            <Reveal as="div" key={r.cat}>
+              <Link className="catg-card" href={`/shop?category=${encodeURIComponent(r.cat)}`}>
+                <span className="catg-thumb">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={r.items[0].image} alt={r.cat} />
+                </span>
+                <span className="catg-info">
+                  <h3>{r.cat}</h3>
+                  <span>{r.items.length} product{r.items.length === 1 ? "" : "s"}</span>
+                </span>
+                <span className="catg-arrow"><ArrowIcon width={22} height={22} /></span>
+              </Link>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WhoWeAre() {
+  const vals: [string, string][] = [
+    ["Trust", "Verified originals, always"],
+    ["Transparency", "Honest about what we carry"],
+    ["Care", "Chosen by our expert panel"],
+  ];
+  return (
+    <section className="sec whoweare" id="about">
+      <div className="wrap-wide whoweare-grid">
+        <Reveal className="whoweare-media">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/brand/who-we-are.png" alt="Who we are: SahhaDaily, a family-led wellness brand based in Lebanon" />
+        </Reveal>
+        <div className="whoweare-copy">
+          <Reveal>
+            <span className="kicker">Who we are</span>
+            <h2 className="h-lg">A family-led <span className="accent it">wellness brand.</span></h2>
+            <p className="lead">Our goal is to bring trusted European wellness products closer to customers in Lebanon, based in West Bekaa, Al Qaraoun.</p>
+          </Reveal>
+          <Reveal className="whoweare-vals">
+            {vals.map(([t, p]) => (
+              <div className="wv" key={t}><strong>{t}</strong><span>{p}</span></div>
+            ))}
+          </Reveal>
+          <p className="ar" style={{ marginTop: 16, color: "var(--green)", fontWeight: 700 }}>دعم يومي لصحة أفضل 🌿</p>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function HomePage() {
   return (
     <main>
-      <section className="hero">
-        <div className="container heroGrid">
-          <div className="heroCopy heroEnter">
-            <span className="eyebrow"><span className="g">Sahha</span>Daily · <span className="g">صحة</span> دايلي</span>
-            <h1>Premium Wellness <span className="hl">Supplements</span></h1>
-            <p className="arabicTag">صحتك بالديني <em>— <span className="o">Daily</span> Support, Better You.</em></p>
-            <p className="lead">
-              Explore Products For Daily Wellness, Beauty, Immunity, Energy, And Active Lifestyles.
-            </p>
-            <div className="heroActions">
-              <Link href="/shop" className="btn btnPrimary">Shop Products</Link>
-              <Link href="#categories" className="btn btnSecondary">Explore Categories</Link>
-            </div>
-          </div>
-          <HeroMotion />
-        </div>
-      </section>
-
-      <section className="container">
-        <div className="statStrip">
-          <div className="statItem"><strong>Delivered To Your Door</strong><span>Fast And Reliable Shipping</span></div>
-          <div className="statItem"><strong>WeightWorld Sourced</strong><span>Quality-Verified Formulas</span></div>
-          <div className="statItem"><strong>{products.length} Products</strong><span>Across {categories.length} Wellness Categories</span></div>
-          <div className="statItem"><strong>Full Details On Every Page</strong><span>Ingredients, Usage, And Nutrition</span></div>
-        </div>
-      </section>
-
-      <ProductFinder />
-
-      <RoutineBundles />
-
-      <section className="section" id="categories">
-        <div className="container">
-          <Reveal className="sectionHead">
-            <div>
-              <span className="eyebrow">Shop By Category</span>
-              <h2>Browse By Wellness <span className="hl">Priority</span></h2>
-            </div>
-            <p className="lead">Each Product Links To A Dedicated Details Page.</p>
-          </Reveal>
-          <div className="categoryGrid">
-            {categorySections.map(({ category, items }, index) => (
-              <Reveal key={category} delay={index * 0.04}>
-                <Link href={`/shop?category=${encodeURIComponent(category)}`} className="categoryCard">
-                  <span className="count">{items.length} product{items.length === 1 ? "" : "s"}</span>
-                  <h3>{category}</h3>
-                  <p>View the {category.toLowerCase()} range and compare formats.</p>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {categorySections.map(({ category, items }) => (
-        <section className="section" key={category} style={{ paddingTop: 0 }}>
-          <div className="container">
-            <div className="sectionHead">
-              <div>
-                <span className="eyebrow">{category}</span>
-                <h2>{category} <span className="hl">Supplements</span></h2>
-              </div>
-              <Link href={`/shop?category=${encodeURIComponent(category)}`} className="btn btnSecondary">View All</Link>
-            </div>
-            <div className="productGrid">
-              {items.slice(0, 4).map((product, idx) => (
-                <Reveal key={product.id} delay={idx * 0.06}>
-                  <ProductCard product={product} />
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </section>
-      ))}
-
-      <section className="section" id="experts">
-        <div className="container">
-          <Reveal className="sectionHead">
-            <div>
-              <span className="eyebrow">Our Expert Panel</span>
-              <h2>Chosen, Not Just <span className="hl">Stocked</span></h2>
-            </div>
-            <p className="lead">
-              Every product we carry is reviewed by an independent panel of specialists across Europe and Lebanon — keeping our range safe, effective, and genuinely useful.
-            </p>
-          </Reveal>
-          <div className="expertGrid">
-            {experts.map((expert, index) => (
-              <Reveal key={expert.id} delay={index * 0.05} className="expertCard" id={`expert-${expert.id}`}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className="expertAvatar" src={expert.avatar} alt={expert.name} width={96} height={96} loading="lazy" />
-                <span className="expertRegion">{expert.flag} {expert.region}</span>
-                <h3>{expert.name}</h3>
-                <span className="expertRole">{expert.role}</span>
-                <p>{expert.bio}</p>
-                <a {...waLink(`Hi SahhaDaily! 🌿 I'd like a wellness consultation with ${expert.name}.`)} className="expertLink">
-                  Chat On WhatsApp →
-                </a>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section" id="about">
-        <div className="container whyGrid">
-          <Reveal className="brandPanel">
-            <span className="eyebrow" style={{ color: "#f1b094" }}>About SahhaDaily</span>
-            <h2>European Quality, <span className="hl">Lebanese Heart</span>.</h2>
-            <p>
-              We operate between Germany and Lebanon. From Germany, <strong>Sohaib</strong> handles sourcing and quality, working directly with established European supplement manufacturers. In Lebanon, <strong>Mohamed</strong> leads our local operations, making sure the right products reach the families who need them.
-            </p>
-            <p>
-              That bridge — European quality with real, on-the-ground Lebanese knowledge — is the heart of what we do.
-            </p>
-            <p className="brandPromise">
-              Our promise is in our name. <strong>Sahha</strong> means health — and our mission is to support yours, every single day.
-            </p>
-          </Reveal>
-          <div className="principles">
-            <Reveal className="principle">
-              <h3>🇩🇪 Sourced In Europe</h3>
-              <p>Sohaib works hand-in-hand with established European manufacturers on sourcing and quality.</p>
-            </Reveal>
-            <Reveal className="principle" delay={0.05}>
-              <h3>🇱🇧 Delivered In Lebanon</h3>
-              <p>Mohamed leads local operations, getting the right products to the families who need them.</p>
-            </Reveal>
-            <Reveal className="principle" delay={0.1}>
-              <h3>🔬 Chosen, Not Stocked</h3>
-              <p>An independent panel of experts across Europe and Lebanon reviews our range so it stays safe and useful.</p>
-            </Reveal>
-            <Reveal className="principle" delay={0.15}>
-              <h3>📦 Reliable Logistics</h3>
-              <p>Dr. Kamal Mohyeldine keeps our supply chain running smoothly — from Europe all the way to your door.</p>
-            </Reveal>
-          </div>
-        </div>
-      </section>
+      <Hero />
+      <Marquee />
+      <Featured />
+      <Categories />
+      <ExpertsSection />
+      <WhoWeAre />
     </main>
   );
 }

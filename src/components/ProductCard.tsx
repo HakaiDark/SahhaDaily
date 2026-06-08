@@ -1,59 +1,51 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/data/products";
+import { ArrowIcon } from "./icons";
 
-const LABEL_MAP = {
-  bestSeller: { text: "Best Seller", cls: "labelBestSeller" },
-  popular:    { text: "Popular",     cls: "labelPopular" },
-  new:        { text: "New",         cls: "labelNew" },
-  lowStock:   { text: "Low Stock",   cls: "labelLowStock" },
-} as const;
+const LABELS: Record<string, { t: string; cls: string }> = {
+  bestSeller: { t: "Best Seller", cls: "bestSeller" },
+  popular: { t: "Popular", cls: "popular" },
+  new: { t: "New", cls: "new" },
+  lowStock: { t: "Low Stock", cls: "lowStock" },
+};
 
-function Stars({ rating }: { rating: number }) {
-  const full  = Math.floor(rating);
-  const half  = rating % 1 >= 0.5;
-  const empty = 5 - full - (half ? 1 : 0);
+export function Stars({ rating }: { rating: number }) {
+  const pct = (Math.max(0, Math.min(5, rating)) / 5) * 100;
   return (
-    <span className="stars" aria-label={`${rating} out of 5`}>
-      {"★".repeat(full)}
-      {half ? "½" : ""}
-      {"☆".repeat(empty)}
+    <span className="stars" aria-label={`${rating} out of 5`} title={`${rating} / 5`}>
+      <span className="stars-empty">★★★★★</span>
+      <span className="stars-fill" style={{ width: `${pct}%` }}>★★★★★</span>
     </span>
   );
 }
 
 export function ProductCard({ product }: { product: Product }) {
-  const label = product.label ? LABEL_MAP[product.label] : null;
-
+  const label = product.label ? LABELS[product.label] : null;
   return (
-    <article className="productCard">
-      <Link href={`/product/${product.slug}`} className="productImage" aria-label={`View ${product.name}`}>
-        <Image
-          src={product.image}
-          alt={product.name}
-          width={700}
-          height={700}
-          sizes="(max-width: 760px) 100vw, (max-width: 980px) 50vw, 25vw"
-          loading="lazy"
-        />
-        {label && <span className={`productLabel ${label.cls}`}>{label.text}</span>}
-      </Link>
-      <div className="productBody">
-        <div className="badgeRow">
-          <span className="badge">{product.category}</span>
-          <span className="badge">{product.format}</span>
+    <article className="pcard">
+      <div className="pcard-media">
+        {label && <span className={"tag " + label.cls}>{label.t}</span>}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={product.image} alt={product.name} loading="lazy" />
+      </div>
+      <Link className="pcard-link" href={`/product/${product.slug}`} aria-label={`View ${product.name}`} />
+      <div className="pcard-body">
+        <div className="pcard-meta">
+          <span className="pcard-cat">{product.category}</span>
+          <span className="pcard-cat" style={{ color: "var(--muted)" }}>{product.format}</span>
         </div>
         <h3>{product.name}</h3>
-        <div className="ratingRow">
+        <div className="rrow">
           <Stars rating={product.rating} />
-          <span className="ratingCount">({product.reviewCount})</span>
+          <span className="rcount">({product.reviewCount})</span>
         </div>
-        <div className="productFooter">
-          <span className="sku">{product.sku}</span>
-          <Link className="smallLink" href={`/product/${product.slug}`}>View Details →</Link>
+        <div className="pcard-foot">
+          <span className="alink" style={{ fontSize: "0.82rem" }}>
+            <span className="ln">View</span>
+            <ArrowIcon width={15} height={15} />
+          </span>
         </div>
       </div>
     </article>
   );
 }
-
