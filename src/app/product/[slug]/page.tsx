@@ -1,253 +1,108 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import type { ReactNode } from "react";
-import { ProductCard } from "@/components/ProductCard";
-import { ProductGallery } from "@/components/ProductGallery";
-import { StickyOrderBar } from "@/components/StickyOrderBar";
-import { getProductBySlug, getRelatedProducts, products } from "@/data/products";
+import { ProductCard, Stars } from "@/components/ProductCard";
+import { ProductTabs } from "@/components/ProductTabs";
+import { getProductBySlug, getRelatedProducts } from "@/data/products";
 import { getGoalsForSku } from "@/data/merchandising";
 import { waLink } from "@/data/contact";
-import scrapedProducts from "@/data/weightworld-scraped-launch-products.json";
+import { WaIcon } from "@/components/icons";
 
-type ProductPageProps = {
-  params: Promise<{ slug: string }>;
-};
+type ProductPageProps = { params: Promise<{ slug: string }> };
 
-type ScrapedNutrition = {
-  serving?: string;
-  rows?: Array<{
-    nutrient: string;
-    amount: string;
-    nrv: string;
-  }>;
-  otherIngredients?: string;
-  advice?: string;
-  storage?: string;
-} | null;
-
-type ScrapedProductGallery = {
-  localImages?: string[];
-};
-
-const trustBadges = ["🇬🇧 UK-Sourced", "🔬 Third-Party Tested", "🌿 GMP Quality", "✅ Verified Original"];
-
-function ProductAccordion({
-  title,
-  children,
-  open = false
-}: {
-  title: string;
-  children: ReactNode;
-  open?: boolean;
-}) {
-  return (
-    <details className="productAccordion" open={open}>
-      <summary>{title}</summary>
-      <div className="accordionBody">{children}</div>
-    </details>
-  );
-}
-
-export function generateStaticParams() {
-  return products.map((product) => ({ slug: product.slug }));
-}
-
-export async function generateMetadata({ params }: ProductPageProps) {
-  const { slug } = await params;
-  const product = getProductBySlug(slug);
-  return {
-    title: product ? `${product.name} | SahhaDaily` : "Product | SahhaDaily",
-    description: product?.description
-  };
-}
+const TRUST = ["🇬🇧 UK-sourced", "🔬 Lab-tested", "🌿 GMP quality", "✅ Verified original"];
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
   const product = getProductBySlug(slug);
+  if (!product) notFound();
 
-  if (!product) {
-    notFound();
-  }
+  const related = getRelatedProducts(product);
+  const goals = getGoalsForSku(product.sku);
 
-  const relatedProducts = getRelatedProducts(product);
-  const scrapedProduct = scrapedProducts.products.find((item) => item.sku === product.sku);
-  const nutrition = scrapedProduct?.nutrition as ScrapedNutrition;
-  const scrapedGallery = scrapedProduct as ScrapedProductGallery | undefined;
-  const galleryImages = scrapedGallery?.localImages?.length ? scrapedGallery.localImages : [product.image];
-  const productGoals = getGoalsForSku(product.sku);
-  const orderMessage = [
-    "Hi SahhaDaily! 🌿",
-    "I'd like to order:",
-    "• " + product.name,
-    "• SKU: " + product.sku,
-    "",
-    "My details:",
-    "Name: ",
-    "City: ",
-    "Address: "
-  ].join("\n");
+  const pfaqs = [
+    { q: `How do I take ${product.name.split(" ").slice(0, 3).join(" ")}?`, a: product.howToUse },
+    { q: "What's inside?", a: product.ingredients },
+    { q: "Who is it for?", a: `Designed for ${goals.map((x) => x.label.toLowerCase()).join(", ") || product.category.toLowerCase()}. ${product.whyUse[0] || ""}` },
+    { q: "Is it safe to take?", a: product.safety },
+    { q: "How do I order and pay?", a: "Add it to your basket and confirm over WhatsApp. Our team replies fast with pricing and delivery, shared on confirmation so it's always up to date." },
+    { q: "Are your products original?", a: "Always. Every product is sourced directly from WeightWorld in the UK: verified originals only, never imitations." },
+  ];
 
   return (
     <main>
-      <section className="productHero">
-        <div className="container productHeroGrid">
-          <ProductGallery images={galleryImages} name={product.name} />
-          <div className="detailPanel">
-            <Link href="/shop" className="smallLink">← Back To Shop</Link>
-            <div className="metaList">
-              <span className="badge">{product.category}</span>
-              <span className="badge">{product.format}</span>
-              <span className="badge">{product.sku}</span>
-              {product.label === "bestSeller" && <span className="badge" style={{ background: "var(--green)", color: "#fff" }}>Best Seller</span>}
-              {product.label === "lowStock" && <span className="badge" style={{ background: "rgba(180,50,30,0.9)", color: "#fff" }}>Low Stock</span>}
-              {product.label === "new" && <span className="badge" style={{ background: "var(--accent)", color: "#fff" }}>New</span>}
+      <section className="pdx">
+        <div className="wrap-wide">
+          <Link className="alink pdx-back" href="/shop">← Back to shop</Link>
+          <div className="pdx-grid">
+            <div className="pdx-media">
+              <span className="blob" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={product.image} alt={product.name} />
             </div>
-            <h1>{product.name}</h1>
-            <div className="ratingRow" style={{ marginBottom: 16 }}>
-              <span className="stars" aria-label={`${product.rating} out of 5`}>
-                {"★".repeat(Math.floor(product.rating))}
-                {product.rating % 1 >= 0.5 ? "½" : ""}
-                {"☆".repeat(5 - Math.floor(product.rating) - (product.rating % 1 >= 0.5 ? 1 : 0))}
-              </span>
-              <span className="ratingCount">{product.rating} · {product.reviewCount} verified reviews</span>
-            </div>
-            <p className="lead">{product.description}</p>
-
-            <ul className="checkList detailBenefits" aria-label="Key benefits">
-              {product.benefits.slice(0, 3).map((benefit) => (
-                <li key={benefit}>{benefit}</li>
-              ))}
-            </ul>
-
-            <div className="purchasePanel">
-              <div>
-                <span>Ready To Order?</span>
-                <strong>Reserve Yours Via WhatsApp</strong>
+            <div className="pdx-info">
+              <div className="pdx-cat">{product.category} · {product.sku}</div>
+              <h1>{product.name}</h1>
+              <div className="rrow" style={{ marginBottom: 16 }}>
+                <Stars rating={product.rating} />
+                <span className="rcount">{product.rating} · {product.reviewCount} reviews</span>
               </div>
-              <a {...waLink(orderMessage)} className="btn btnPrimary">
-                Order On WhatsApp
-              </a>
-            </div>
-
-            <div className="trustChips" aria-label="Shopping confidence">
-              {trustBadges.map((badge) => (
-                <span key={badge}>{badge}</span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <StickyOrderBar name={product.name} message={orderMessage} />
-
-      <section className="section" style={{ paddingTop: 36 }}>
-        <div className="container productDetailsShell">
-          <div className="productIntro">
-            <div className="productSpecCard">
-              <span className="eyebrow">Quick Specs</span>
-              <dl>
-                <div><dt>Format</dt><dd>{product.format}</dd></div>
-                <div><dt>Rating</dt><dd>{product.rating} / 5</dd></div>
-                <div><dt>Routine Fit</dt><dd>{productGoals.map((goal) => goal.shortLabel).join(", ") || product.category}</dd></div>
-              </dl>
-            </div>
-
-            {productGoals.length > 0 && (
-              <div className="routineFitCard">
-                <span className="eyebrow">Fits These Routines</span>
-                {productGoals.map((goal) => (
-                  <div key={goal.id}>
-                    <strong>{goal.label}</strong>
-                    <p>{goal.description}</p>
-                  </div>
+              <p className="pdx-desc">{product.description}</p>
+              <div className="pdx-benefits">
+                {product.benefits.slice(0, 3).map((b) => (
+                  <span key={b}>{b.length > 42 ? b.slice(0, 40) + "…" : b}</span>
                 ))}
               </div>
-            )}
-
-            {product.whyUse.length > 0 && (
-              <div className="routineFitCard">
-                <span className="eyebrow">Why Choose This</span>
-                <ul className="checkList">
-                  {product.whyUse.map((reason) => <li key={reason}>{reason}</li>)}
-                </ul>
-              </div>
-            )}
-          </div>
-
-          <div className="productAccordions">
-            <ProductAccordion title="Benefits" open>
-              <ul className="checkList">
-                {product.benefits.map((benefit) => <li key={benefit}>{benefit}</li>)}
-              </ul>
-            </ProductAccordion>
-
-            <ProductAccordion title="Key Features">
-              <ul className="checkList">
-                {product.keyFeatures.map((feature) => <li key={feature}>{feature}</li>)}
-              </ul>
-            </ProductAccordion>
-
-            <ProductAccordion title="How To Use">
-              <p>{product.howToUse}</p>
-            </ProductAccordion>
-
-            <ProductAccordion title="Ingredients">
-              <p>{nutrition?.otherIngredients || product.ingredients}</p>
-            </ProductAccordion>
-
-            <ProductAccordion title="Nutritional Information">
-              {nutrition?.serving && <p className="servingText">{nutrition.serving}</p>}
-              {nutrition?.rows && nutrition.rows.length > 0 ? (
-                <div className="nutritionTableWrap">
-                  <table className="nutritionTable">
-                    <thead>
-                      <tr>
-                        <th>Amount Per Serving</th>
-                        <th>Amount</th>
-                        <th>%NRV</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {nutrition.rows.map((row) => (
-                        <tr key={`${row.nutrient}-${row.amount}`}>
-                          <td>{row.nutrient}</td>
-                          <td>{row.amount}</td>
-                          <td>{row.nrv}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+              <div className="pdx-buy">
+                <div className="pdx-buy-actions">
+                  <a className="btn accent" {...waLink(`Hi SahhaDaily! 🌿 I'd like to order ${product.name}`)}>
+                    <span><WaIcon width={18} height={18} />Order on WhatsApp</span>
+                  </a>
                 </div>
-              ) : (
-                <ul className="checkList">
-                  {product.nutritionalInfo.map((item) => <li key={item}>{item}</li>)}
-                </ul>
-              )}
-            </ProductAccordion>
-
-            <ProductAccordion title="Advice And Storage">
-              <p>{nutrition?.advice || product.safety}</p>
-              {nutrition?.storage && <p>{nutrition.storage}</p>}
-            </ProductAccordion>
+              </div>
+              <div className="pdx-trust">
+                {TRUST.map((t) => <span key={t}>{t}</span>)}
+              </div>
+            </div>
           </div>
+
+          <ProductTabs product={product} />
         </div>
       </section>
 
-      {relatedProducts.length > 0 && (
-        <section className="section" style={{ paddingTop: 0 }}>
-          <div className="container">
-            <div className="sectionHead">
-              <div>
-                <span className="eyebrow">Related Products</span>
-                <h2>You May Also <span className="hl">Like</span></h2>
-              </div>
+      {related.length > 0 && (
+        <section className="sec tone-mint">
+          <div className="wrap-wide">
+            <div className="intro">
+              <span className="kicker">You may also like</span>
+              <h2 className="h-lg">More from <span className="accent it">{product.category.toLowerCase()}</span></h2>
             </div>
-            <div className="productGrid">
-              {relatedProducts.map((item) => <ProductCard key={item.id} product={item} />)}
+            <div className="pgrid">
+              {related.map((x) => <ProductCard key={x.id} product={x} />)}
             </div>
           </div>
         </section>
       )}
+
+      <section className="sec" style={{ paddingTop: 0 }}>
+        <div className="wrap-wide faq-wrap">
+          <div className="faq-intro">
+            <span className="kicker">Good to know</span>
+            <h2 className="h-lg" style={{ marginTop: 16 }}>Questions about this <span className="accent it">product</span></h2>
+            <p className="lead">Anything we didn&apos;t cover? Message us on WhatsApp and we reply fast.</p>
+            <a className="btn accent faq-help" {...waLink(`Hi SahhaDaily! 🌿 I have a question about ${product.name}`)}>
+              <span><WaIcon width={18} height={18} />Ask about this product</span>
+            </a>
+          </div>
+          <div className="pfaq">
+            {pfaqs.map((f, i) => (
+              <details className="faq-item" key={f.q} open={i === 0}>
+                <summary>{f.q}<span className="pm">+</span></summary>
+                <div className="faq-a">{f.a}</div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

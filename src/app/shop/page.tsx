@@ -1,66 +1,26 @@
-import { Suspense } from "react";
-import { ProductFinder } from "@/components/ProductFinder";
-import { ShopFilters } from "@/components/ShopFilters";
+import { ShopClient } from "@/components/ShopClient";
 
-export const metadata = {
-  title: "Shop Supplements | SahhaDaily",
-  description: "Browse premium UK-sourced wellness supplements delivered straight to your door. بضاعة أصلية، وصلت على بيتك."
-};
+type ShopPageProps = { searchParams: Promise<{ category?: string }> };
 
-const trustItems = [
-  { icon: "🇬🇧", en: "Direct From UK", ar: "مباشرة من بريطانيا" },
-  { icon: "🚚", en: "Delivered To Your Door", ar: "توصيل لحد عندك" },
-  { icon: "✓",   en: "Verified Original", ar: "بضاعة أصلية مضمونة" },
-  { icon: "💬",  en: "Order On WhatsApp", ar: "اطلب على واتساب" },
-];
-
-export default function ShopPage() {
+export default async function ShopPage({ searchParams }: ShopPageProps) {
+  const { category } = await searchParams;
   return (
-    <main className="section">
-      <div className="container">
-
-        {/* ── Bilingual hero ── */}
-        <div className="shopHero">
-          <span className="eyebrow" style={{ display: "block", marginBottom: 18 }}>
-            كتالوج المنتجات · Product Catalog
-          </span>
-          <h1 style={{ fontSize: "clamp(2.6rem, 5.5vw, 5rem)", marginBottom: 16 }}>
-            Shop <em>Supplements</em>
-          </h1>
-          <p className="shopHeroAr">
-            صحتك <span>بالديني</span> — كل شي <span>أصلي</span> 🌿
-          </p>
-          <p className="shopHeroSub">
-            Premium UK-Sourced Wellness, Delivered Straight To Your Door.
-            <br />
-            <span style={{ fontFamily: "'Cairo', sans-serif", fontWeight: 700, color: "var(--green)" }}>
-              وصلت على بيتك من أحسن ماركات أوروبا.
-            </span>
-          </p>
+    <main style={{ paddingTop: 40 }}>
+      <section className="sec-sm">
+        <div className="wrap-wide">
+          <div className="shop-hero">
+            <span className="kicker center">كتالوج المنتجات · Product catalog</span>
+            <h1 className="display" style={{ marginTop: 20 }}>Shop <span className="accent it">supplements</span></h1>
+            <p className="shop-hero-ar ar" style={{ marginTop: 14 }}>مكمّلات <span className="o">أصلية</span> من أوروبا 🌿</p>
+            <p className="lead" style={{ marginInline: "auto", marginTop: 10 }}>Premium European-sourced wellness, delivered straight to your door.</p>
+          </div>
         </div>
-
-        {/* ── Trust strip ── */}
-        <div className="shopTrust">
-          {trustItems.map(({ icon, en, ar }) => (
-            <div key={en} className="shopTrustItem">
-              <span className="shopTrustIcon">{icon}</span>
-              <span>
-                {en}
-                <span className="shopTrustAr"> · {ar}</span>
-              </span>
-            </div>
-          ))}
+      </section>
+      <section className="sec-sm" style={{ paddingTop: 0 }}>
+        <div className="wrap-wide">
+          <ShopClient initialCategory={category} />
         </div>
-
-        {/* ── Guided routine finder ── */}
-        <ProductFinder />
-
-        {/* ── Catalog ── */}
-        <Suspense fallback={<p>Loading products...</p>}>
-          <ShopFilters />
-        </Suspense>
-
-      </div>
+      </section>
     </main>
   );
 }
