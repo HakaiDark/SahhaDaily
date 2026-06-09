@@ -1,7 +1,10 @@
+import { readdirSync } from "fs";
+import path from "path";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProductCard, Stars } from "@/components/ProductCard";
 import { ProductTabs } from "@/components/ProductTabs";
+import { ProductGallery } from "@/components/ProductGallery";
 import { getProductBySlug, getRelatedProducts } from "@/data/products";
 import { getGoalsForSku } from "@/data/merchandising";
 import { waLink } from "@/data/contact";
@@ -9,7 +12,21 @@ import { WaIcon } from "@/components/icons";
 
 type ProductPageProps = { params: Promise<{ slug: string }> };
 
-const TRUST = ["🇬🇧 UK-sourced", "🔬 Lab-tested", "🌿 GMP quality", "✅ Verified original"];
+function getGalleryImages(sku: string, primary: string): string[] {
+  // Lead with the clean background-removed packshot, then the lifestyle/marketing
+  // creatives. The first raw gallery file (NN/01) is the same front-of-pack shot as
+  // the packshot, so we drop it to avoid a duplicate.
+  const dir = sku.toLowerCase();
+  try {
+    const files = readdirSync(path.join(process.cwd(), "public", "products", "gallery", dir))
+      .filter((f) => /\.(webp|jpe?g|png)$/i.test(f))
+      .sort();
+    if (files.length) return [primary, ...files.slice(1).map((f) => `/products/gallery/${dir}/${f}`)];
+  } catch {
+    // no gallery folder for this sku — just show the single packshot
+  }
+  return [primary];
+}
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
@@ -18,6 +35,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const related = getRelatedProducts(product);
   const goals = getGoalsForSku(product.sku);
+  const galleryImages = getGalleryImages(product.sku, product.image);
 
   const pfaqs = [
     { q: `How do I take ${product.name.split(" ").slice(0, 3).join(" ")}?`, a: product.howToUse },
@@ -34,11 +52,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <div className="wrap-wide">
           <Link className="alink pdx-back" href="/shop">← Back to shop</Link>
           <div className="pdx-grid">
-            <div className="pdx-media">
-              <span className="blob" />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={product.image} alt={product.name} />
-            </div>
+            <ProductGallery images={galleryImages} name={product.name} />
             <div className="pdx-info">
               <div className="pdx-cat">{product.category} · {product.sku}</div>
               <h1>{product.name}</h1>
@@ -59,9 +73,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   </a>
                 </div>
               </div>
-              <div className="pdx-trust">
-                {TRUST.map((t) => <span key={t}>{t}</span>)}
-              </div>
             </div>
           </div>
 
@@ -74,7 +85,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <div className="wrap-wide">
             <div className="intro">
               <span className="kicker">You may also like</span>
-              <h2 className="h-lg">More from <span className="accent it">{product.category.toLowerCase()}</span></h2>
+              <h2 className="h-lg">Complete your <span className="accent it">routine</span></h2>
             </div>
             <div className="pgrid">
               {related.map((x) => <ProductCard key={x.id} product={x} />)}

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { ComingSoon } from "@/components/ComingSoon";
+import { Marquee } from "@/components/Marquee";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import "./globals.css";
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <div className="grain" aria-hidden="true" />
         <ComingSoon />
+        <Marquee />
         <SiteHeader />
         {children}
         <SiteFooter />

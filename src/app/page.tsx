@@ -6,26 +6,6 @@ import { ProductCard } from "@/components/ProductCard";
 import { Reveal } from "@/components/Reveal";
 import { ArrowIcon } from "@/components/icons";
 
-const marqueeItems = [
-  "🌿 100% verified originals · بضاعة أصلية مضمونة",
-  "🇬🇧 Directly sourced from Europe · من أوروبا",
-  "🚚 Delivered to your door · توصيل لحد عندك",
-  "💬 Order on WhatsApp · اطلب على واتساب",
-];
-
-function Marquee() {
-  const set = [...marqueeItems, ...marqueeItems];
-  return (
-    <div className="marquee">
-      <div className="marquee-track">
-        {set.map((m, i) => (
-          <span className="marquee-item" key={i}>{m}<span className="dot" /></span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function Featured() {
   const picked = products.filter((p) => p.featured || p.label === "bestSeller" || p.label === "popular").slice(0, 8);
   const list = picked.length >= 8 ? picked : products.slice(0, 8);
@@ -99,7 +79,7 @@ function WhoWeAre() {
         </Reveal>
         <div className="whoweare-copy">
           <Reveal>
-            <span className="kicker">Who we are</span>
+            <span className="kicker center">Who we are</span>
             <h2 className="h-lg">A family-led <span className="accent it">wellness brand.</span></h2>
             <p className="lead">Our goal is to bring trusted European wellness products closer to customers in Lebanon, based in West Bekaa, Al Qaraoun.</p>
           </Reveal>
@@ -119,7 +99,6 @@ export default function HomePage() {
   return (
     <main>
       <Hero />
-      <Marquee />
       <Featured />
       <Categories />
       <ExpertsSection />

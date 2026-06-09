@@ -391,9 +391,13 @@ export function getProductBySlug(slug: string) {
   return products.find((product) => product.slug === slug);
 }
 
-export function getRelatedProducts(product: Product) {
-  return products
-    .filter((item) => item.slug !== product.slug)
-    .filter((item) => item.category === product.category)
-    .slice(0, 4);
+export function getRelatedProducts(product: Product, count = 4) {
+  const others = products.filter((item) => item.slug !== product.slug);
+  const sameCategory = others.filter((item) => item.category === product.category);
+  if (sameCategory.length >= count) return sameCategory.slice(0, count);
+  // Top up with other products (favouring featured ones) so the row is always full.
+  const fillers = others
+    .filter((item) => item.category !== product.category)
+    .sort((a, b) => Number(b.featured ?? false) - Number(a.featured ?? false));
+  return [...sameCategory, ...fillers].slice(0, count);
 }
