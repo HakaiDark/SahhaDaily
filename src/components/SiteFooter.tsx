@@ -1,17 +1,10 @@
 import Link from "next/link";
 import { waLink } from "@/data/contact";
-import { WaIcon, InstaIcon, PinIcon, ChatIcon } from "./icons";
-import { Frond, Olive } from "./Botanical";
+import { WaIcon, InstaIcon, PinIcon } from "./icons";
 
 export function SiteFooter() {
   return (
     <footer className="ftr" id="contact">
-      <div className="ftr-deco botany sway-slow" style={{ top: -30, right: "3%", width: 150, height: 230 }}>
-        <Frond />
-      </div>
-      <div className="ftr-deco drift" style={{ bottom: 80, left: "-2%", width: 240, height: 110, opacity: 0.4 }}>
-        <Olive />
-      </div>
       <div className="wrap-wide">
         <div className="ftr-grid">
           <div className="ftr-brand">
@@ -37,11 +30,11 @@ export function SiteFooter() {
             <div className="ftr-info">
               <div className="ftr-info-row">
                 <span className="ftr-info-ic"><PinIcon /></span>
-                <span><b>Based in Lebanon</b><small>West Bekaa · Al Qaraoun</small></span>
+                <span><b>Al Qaraoun</b><small>West Bekaa, Lebanon</small></span>
               </div>
               <div className="ftr-info-row">
-                <span className="ftr-info-ic"><ChatIcon /></span>
-                <span><b>Fast replies</b><small>Usually within the hour, every day</small></span>
+                <span className="ftr-info-ic"><PinIcon /></span>
+                <span><b>Taalabaya</b><small>Bekaa, Lebanon</small></span>
               </div>
             </div>
             <a className="ftr-wa" {...waLink("Hi SahhaDaily! 🌿 I have a question")}><WaIcon />Chat on WhatsApp</a>

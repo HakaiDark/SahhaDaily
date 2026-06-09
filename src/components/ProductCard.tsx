@@ -24,7 +24,6 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <article className="pcard">
       <div className="pcard-media">
-        {label && <span className={"tag " + label.cls}>{label.t}</span>}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={product.image} alt={product.name} loading="lazy" />
       </div>
@@ -38,6 +37,7 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="rrow">
           <Stars rating={product.rating} />
           <span className="rcount">({product.reviewCount})</span>
+          {label && <span className={"tag inline " + label.cls}>{label.t}</span>}
         </div>
         <div className="pcard-foot">
           <span className="alink" style={{ fontSize: "0.82rem" }}>

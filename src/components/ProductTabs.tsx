@@ -4,14 +4,13 @@ import { useState } from "react";
 import type { Product } from "@/data/products";
 
 const TABS = [
-  ["benefits", "Benefits"],
   ["how", "How to use"],
   ["ingredients", "Ingredients"],
   ["nutrition", "Nutrition"],
 ] as const;
 
 export function ProductTabs({ product }: { product: Product }) {
-  const [tab, setTab] = useState<string>("benefits");
+  const [tab, setTab] = useState<string>("how");
   return (
     <div className="pdx-tabs">
       <div className="tabbar">
@@ -19,11 +18,6 @@ export function ProductTabs({ product }: { product: Product }) {
           <button key={id} className={tab === id ? "on" : ""} onClick={() => setTab(id)}>{label}</button>
         ))}
       </div>
-      {tab === "benefits" && (
-        <div className="tabpane">
-          <ul className="checklist">{product.benefits.map((b) => <li key={b}>{b}</li>)}</ul>
-        </div>
-      )}
       {tab === "how" && (
         <div className="tabpane">
           <div>
